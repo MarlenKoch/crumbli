@@ -21,7 +21,7 @@ db.serialize(() => {
   image TEXT,
   instructions TEXT NOT NULL,
   favorite BOOLEAN NOT NULL DEFAULT 0,
-  category TEXT CHECK (category IN ('Kochen', 'Backen')) NOT NULL
+  category TEXT NOT NULL
   );`);
 
   //Tabelle für Zutaten (Zutaten ID, Name)
@@ -35,26 +35,10 @@ db.serialize(() => {
   recipe_id INTEGER NOT NULL,
   ingredient_id INTEGER NOT NULL,
   amount TEXT NOT NULL,
-  unit_id INTEGER,
+  unit TEXT NOT NULL,
   FOREIGN KEY(recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
   FOREIGN KEY(ingredient_id) REFERENCES ingredients(id)ON DELETE CASCADE,
-  FOREIGN KEY(unit_id) REFERENCES units(id) ON DELETE SET NULL,
   PRIMARY KEY (recipe_id, ingredient_id)
-  );`);
-
-  //Tabelle für Einheiten (Einheiten ID, Name)
-  db.run(`CREATE TABLE IF NOT EXISTS units (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL
-  );`);
-
-  //Tabelle für Zutaten-Einheiten (Zutaten ID, Einheiten ID)
-  db.run(`CREATE TABLE IF NOT EXISTS ingredient_units (
-  ingredient_id INTEGER NOT NULL,
-  unit_id INTEGER NOT NULL,
-  FOREIGN KEY(ingredient_id) REFERENCES ingredients(id),
-  FOREIGN KEY(unit_id) REFERENCES units(id),
-  PRIMARY KEY (ingredient_id, unit_id)
   );`);
 });
 
@@ -65,12 +49,10 @@ app.get("/api/recipes", (req, res) => {
   SELECT
   recipes.id AS recipeId, recipes.name, recipes.image, recipes.instructions, recipes.favorite, recipes.category,
   ingredients.id AS ingredientId, ingredients.name AS ingredientName,
-  recipe_ingredients.amount,
-  units.id AS unitId, units.name AS unitName
+  recipe_ingredients.amount, recipe_ingredients.unit
   FROM recipes
   JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
   JOIN ingredients ON recipe_ingredients.ingredient_id = ingredients.id
-  LEFT JOIN units ON recipe_ingredients.unit_id = units.id
   ORDER BY recipes.id
   `,
     [],
@@ -124,25 +106,31 @@ app.get("/api/recipes", (req, res) => {
   );
 });
 
-// Hinzufügen eines neuen Rezepts
-app.post("/api/recipes", (req, res) => {
-  const { name, image, instructions, favorite } = req.body;
-  if (!name || !instructions) {
-    res.status(400).send({ error: "Name und Anleitung sind erforderlich" });
-    return;
-  }
-
-  db.run(
-    "INSERT INTO recipes (name, image, instructions, favorite) VALUES (?, ?, ?, ?)",
-    [name, image, instructions, favorite],
-    function (err) {
+//Abrufen aller Rezepte ohne alles
+app.get("/api/recipes/no-ingredients", (req, res) => {
+  db.all(
+    `
+  SELECT
+  recipes.id AS recipeId, recipes.name, recipes.image, recipes.instructions, recipes.favorite, recipes.category
+  FROM recipes
+  `,
+    [],
+    (err, rows) => {
       if (err) {
         res.status(500).send({ error: err.message });
         return;
       }
-      res
-        .status(201)
-        .send({ id: this.lastID, name, image, instructions, favorite });
+      // Da keine Zutaten zu erwarten sind, brauchen wir keine Gruppierung
+      const recipes = rows.map((row) => ({
+        id: row.recipeId,
+        name: row.name,
+        image: row.image,
+        instructions: row.instructions,
+        favorite: !!row.favorite,
+        category: row.category,
+      }));
+
+      res.json({ recipes });
     }
   );
 });
@@ -172,12 +160,12 @@ app.post("/api/recipes", (req, res) => {
       // Zutaten in die Tabelle 'recipe_ingredients' einfügen
       const ingredientInserts = [];
       for (const ingredient of ingredients) {
-        const { ingredient_id, amount, unit_id } = ingredient;
+        const { ingredient_id, amount, unit } = ingredient;
         ingredientInserts.push(
           new Promise((resolve, reject) => {
             db.run(
-              "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, unit_id) VALUES (?, ?, ?, ?)",
-              [recipeId, ingredient_id, amount, unit_id],
+              "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, unit) VALUES (?, ?, ?, ?)",
+              [recipeId, ingredient_id, amount, unit],
               (err) => {
                 if (err) {
                   reject(err);
@@ -203,6 +191,74 @@ app.post("/api/recipes", (req, res) => {
   );
 });
 
+// Hinzufügen von Ingredients
+app.post("/api/ingredients", (req, res) => {
+  const { name } = req.body;
+
+  // Validierung, ob der Name vorhanden ist
+  if (!name) {
+    res.status(400).send({ error: "Der Name der Zutat ist erforderlich" });
+    return;
+  }
+
+  // Überprüfen, ob die Zutat bereits existiert
+  db.get("SELECT id FROM ingredients WHERE name = ?", [name], (err, row) => {
+    if (err) {
+      res.status(500).send({ error: err.message });
+      return;
+    }
+
+    if (row) {
+      // Wenn die Zutat existiert, wird ein Fehler zurückgegeben
+      res.status(400).send({ error: "Die Zutat existiert bereits" });
+    } else {
+      // Zutat in die Tabelle 'ingredients' einfügen
+      db.run(
+        "INSERT INTO ingredients (name) VALUES (?)",
+        [name],
+        function (err) {
+          if (err) {
+            res.status(500).send({ error: err.message });
+            return;
+          }
+
+          // Erfolgsmeldung mit der ID der neu hinzugefügten Zutat
+          res.status(201).send({
+            message: "Zutat erfolgreich hinzugefügt",
+            ingredient: { id: this.lastID, name },
+          });
+        }
+      );
+    }
+  });
+});
+
+// Abrufen der ID einer Zutat basierend auf dem Zutatennamen
+app.get("/api/ingredients/id", (req, res) => {
+  const name = req.query.name;
+
+  // Überprüfung, ob der Name als Abfrageparameter bereitgestellt wird
+  if (!name) {
+    res.status(400).send({ error: "Der Name der Zutat ist erforderlich" });
+    return;
+  }
+
+  // Suche in der Tabelle 'ingredients' nach dem Namen
+  db.get("SELECT id FROM ingredients WHERE name = ?", [name], (err, row) => {
+    if (err) {
+      res.status(500).send({ error: err.message });
+      return;
+    }
+
+    // Prüfung, ob die Zutat gefunden wurde
+    if (row) {
+      res.status(200).send({ ingredient_id: row.id });
+    } else {
+      res.status(404).send({ error: "Zutat nicht gefunden" });
+    }
+  });
+});
+
 // Abrufen aller favorisierten Rezepte mit ihren Zutaten und Einheiten
 app.get("/api/recipes/favorites", (req, res) => {
   db.all(
@@ -215,7 +271,6 @@ app.get("/api/recipes/favorites", (req, res) => {
   FROM recipes
   JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
   JOIN ingredients ON recipe_ingredients.ingredient_id = ingredients.id
-  LEFT JOIN units ON recipe_ingredients.unit_id = units.id
   WHERE recipes.favorite = 1
   `,
     [],
@@ -269,21 +324,21 @@ app.get("/api/recipes/favorites", (req, res) => {
   );
 });
 
-// Abrufen eines einzelnen Rezepts durch ID
-app.get("/api/recipes/:id", (req, res) => {
-  const id = req.params.id;
-  db.get("SELECT * FROM recipes WHERE id = ?", [id], (err, row) => {
-    if (err) {
-      res.status(500).send({ error: err.message });
-      return;
-    }
-    if (row) {
-      res.json(row);
-    } else {
-      res.status(404).send({ error: "Rezept nicht gefunden" });
-    }
-  });
-});
+// // Abrufen eines einzelnen Rezepts durch ID
+// app.get("/api/recipes/:id", (req, res) => {
+//   const id = req.params.id;
+//   db.get("SELECT * FROM recipes WHERE id = ?", [id], (err, row) => {
+//     if (err) {
+//       res.status(500).send({ error: err.message });
+//       return;
+//     }
+//     if (row) {
+//       res.json(row);
+//     } else {
+//       res.status(404).send({ error: "Rezept nicht gefunden" });
+//     }
+//   });
+// });
 
 //Abrufen eines einzelnen Rezepts durch ID mit Zutaten und Einheiten
 app.get("/api/recipes/:id", (req, res) => {
@@ -293,12 +348,10 @@ app.get("/api/recipes/:id", (req, res) => {
 SELECT
 recipes.id AS recipeId, recipes.name, recipes.image, recipes.instructions, recipes.favorite, recipes.category,
 ingredients.id AS ingredientId, ingredients.name AS ingredientName,
-recipe_ingredients.amount,
-units.id AS unitId, units.name AS unitName
+recipe_ingredients.amount, recipe_ingredients.unit
 FROM recipes
 JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
 JOIN ingredients ON recipe_ingredients.ingredient_id = ingredients.id
-LEFT JOIN units ON recipe_ingredients.unit_id = units.id
 WHERE recipes.id = ?
 `,
     [id],
@@ -346,32 +399,6 @@ app.delete("/api/recipes/:id", (req, res) => {
       res.status(404).send({ error: "Rezept nicht gefunden" });
     }
   });
-});
-
-// Abrufen aller Einheiten für eine spezifische Zutat
-app.get("/api/ingredients/:ingredientId/units", (req, res) => {
-  const ingredientId = req.params.ingredientId;
-  db.all(
-    `
-  SELECT units.id, units.name FROM units
-  JOIN ingredient_units ON units.id = ingredient_units.unit_id
-  WHERE ingredient_units.ingredient_id = ?
-  `,
-    [ingredientId],
-    (err, rows) => {
-      if (err) {
-        res.status(500).send({ error: err.message });
-        return;
-      }
-      if (rows.length > 0) {
-        res.json({ units: rows });
-      } else {
-        res
-          .status(404)
-          .send({ message: "Keine Einheiten für diese Zutat gefunden" });
-      }
-    }
-  );
 });
 
 // Startet den Server
