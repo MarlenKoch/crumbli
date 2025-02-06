@@ -1,53 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Recipe } from "../types"; // Import the Recipe type
+import { Recipe } from "../types";
 
-const RecipeList: React.FC = () => {
+type RecipeListProps = {
+  updateFlag: boolean;
+};
+
+const RecipeList: React.FC<RecipeListProps> = ({ updateFlag }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await axios.get<{ data: Recipe[] }>(
-          "http://localhost:3001/recipes"
-        );
-        setRecipes(response.data.data);
-        setLoading(false);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
-        setError("Failed to fetch recipes");
-        setLoading(false);
-      }
-    };
-
-    fetchRecipes();
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+    axios
+      .get("http://localhost:3000/api/recipes")
+      .then((response) => setRecipes(response.data.recipes))
+      .catch((error) => console.error("Error fetching recipes:", error));
+  }, [updateFlag]); // Fetch recipes whenever updateFlag changes
 
   return (
     <div>
-      <h1>Recipe List</h1>
-      <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}>
-            <h2>{recipe.name}</h2>
-            {recipe.picture && <img src={recipe.picture} alt={recipe.name} />}
-            {recipe.instruction && <p>{recipe.instruction}</p>}
-            <div>
-              <h4>Ingredients:</h4>
-              <ul>
-                {recipe.ingredients.map((ingredient) => (
-                  <li key={ingredient.id}>{ingredient.name}</li>
-                ))}
-              </ul>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <h2>Recipes</h2>
+      {recipes.map((recipe) => (
+        <div key={recipe.id} className="recipe">
+          <h3>{recipe.name}</h3>
+          <p>{recipe.instruction}</p>
+          <p>Category: {recipe.category}</p>
+        </div>
+      ))}
     </div>
   );
 };

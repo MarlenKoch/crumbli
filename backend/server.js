@@ -73,8 +73,7 @@ app.get("/api/recipes", (req, res) => {
           ingredientId,
           ingredientName,
           amount,
-          unitId,
-          unitName,
+          unit,
         } = row;
 
         if (!acc[recipeId]) {
@@ -94,7 +93,7 @@ app.get("/api/recipes", (req, res) => {
             id: ingredientId,
             name: ingredientName,
             amount,
-            unit: unitId ? { id: unitId, name: unitName } : null,
+            unit,
           });
         }
 
@@ -266,8 +265,7 @@ app.get("/api/recipes/favorites", (req, res) => {
   SELECT
   recipes.id AS recipeId, recipes.name, recipes.image, recipes.instructions, recipes.favorite, recipes.category,
   ingredients.id AS ingredientId, ingredients.name AS ingredientName,
-  recipe_ingredients.amount,
-  units.id AS unitId, units.name AS unitName
+  recipe_ingredients.amount, recipe_ingredients.unit
   FROM recipes
   JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
   JOIN ingredients ON recipe_ingredients.ingredient_id = ingredients.id
@@ -291,8 +289,7 @@ app.get("/api/recipes/favorites", (req, res) => {
           ingredientId,
           ingredientName,
           amount,
-          unitId,
-          unitName,
+          unit,
         } = row;
 
         if (!acc[recipeId]) {
@@ -312,7 +309,7 @@ app.get("/api/recipes/favorites", (req, res) => {
             id: ingredientId,
             name: ingredientName,
             amount,
-            unit: unitId ? { id: unitId, name: unitName } : null,
+            unit,
           });
         }
 
@@ -376,7 +373,7 @@ WHERE recipes.id = ?
           id: row.ingredientId,
           name: row.ingredientName,
           amount: row.amount,
-          unit: row.unitId ? { id: row.unitId, name: row.unitName } : null,
+          unit: row.unit,
         })),
       };
 
@@ -399,6 +396,111 @@ app.delete("/api/recipes/:id", (req, res) => {
       res.status(404).send({ error: "Rezept nicht gefunden" });
     }
   });
+});
+
+// Update a recipe's details (name, instructions, etc.) and its ingredients
+app.put("/api/recipes/:id", (req, res) => {
+  const id = req.params.id;
+  const { name, image, instructions, favorite, category, ingredients } =
+    req.body;
+
+  // Start a transaction
+  db.run("BEGIN TRANSACTION", (err) => {
+    if (err) {
+      res.status(500).send({ error: err.message });
+      return;
+    }
+
+    // Update the recipe details
+    db.run(
+      `UPDATE recipes SET name = ?, image = ?, instructions = ?, favorite = ?, category = ? WHERE id = ?`,
+      [name, image, instructions, favorite, category, id],
+      function (err) {
+        if (err) {
+          db.run("ROLLBACK");
+          res.status(500).send({ error: err.message });
+          return;
+        }
+
+        // Update ingredients: First, delete existing ones
+        db.run(
+          "DELETE FROM recipe_ingredients WHERE recipe_id = ?",
+          [id],
+          function (err) {
+            if (err) {
+              db.run("ROLLBACK");
+              res.status(500).send({ error: err.message });
+              return;
+            }
+
+            // Insert updated ingredients
+            const ingredientInserts = [];
+            for (const ingredient of ingredients) {
+              const { ingredient_id, amount, unit } = ingredient;
+              ingredientInserts.push(
+                new Promise((resolve, reject) => {
+                  db.run(
+                    "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, unit) VALUES (?, ?, ?, ?)",
+                    [id, ingredient_id, amount, unit],
+                    (err) => {
+                      if (err) {
+                        reject(err);
+                      } else {
+                        resolve();
+                      }
+                    }
+                  );
+                })
+              );
+            }
+
+            Promise.all(ingredientInserts)
+              .then(() => {
+                db.run("COMMIT", () => {
+                  res
+                    .status(200)
+                    .send({ message: "Rezept erfolgreich aktualisiert" });
+                });
+              })
+              .catch((error) => {
+                db.run("ROLLBACK");
+                res.status(500).send({ error: error.message });
+              });
+          }
+        );
+      }
+    );
+  });
+});
+
+// Update an ingredient's name
+app.put("/api/ingredients/:id", (req, res) => {
+  const id = req.params.id;
+  const { name } = req.body;
+
+  // Validation
+  if (!name) {
+    res.status(400).send({ error: "Der Name der Zutat ist erforderlich" });
+    return;
+  }
+
+  // Update the ingredient's name
+  db.run(
+    "UPDATE ingredients SET name = ? WHERE id = ?",
+    [name, id],
+    function (err) {
+      if (err) {
+        res.status(500).send({ error: err.message });
+        return;
+      }
+
+      if (this.changes > 0) {
+        res.status(200).send({ message: "Zutat erfolgreich aktualisiert" });
+      } else {
+        res.status(404).send({ error: "Zutat nicht gefunden" });
+      }
+    }
+  );
 });
 
 // Startet den Server
