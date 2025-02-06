@@ -4,7 +4,11 @@ import Home from "./components/Home";
 import Recipes from "./components/Recipes";
 import AddRecipe from "./components/AddRecipe";
 import Favorites from "./components/Favorites";
-import RecipeDetails from "./components/RecipeDetails"; // Import your RecipeDetails component
+import RecipeDetails from "./components/RecipeDetails";
+import Impressum from "./components/Impressum";
+import DataSafetyInformation from "./components/DataSafetyInformation";
+import FooterBar from "./components/FooterBar";
+import EditRecipe from "./components/EditRecipe";
 
 const App: React.FC = () => {
   return (
@@ -15,9 +19,12 @@ const App: React.FC = () => {
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/add-recipe" element={<AddRecipe />} />
           <Route path="/favorites" element={<Favorites />} />
-          <Route path="/recipe-details/:id" element={<RecipeDetails />} />{" "}
-          {/* Correctly map the path to RecipeDetails */}
+          <Route path="/recipe-details/:id" element={<RecipeDetails />} />
+          <Route path="/impressum" element={<Impressum />} />
+          <Route path="/data-safety" element={<DataSafetyInformation />} />
+          <Route path="/edit-recipe/:id" element={<EditRecipe />} />
         </Routes>
+        <FooterBar /> {/* Ensure the FooterBar is outside the Routes */}
       </div>
     </Router>
   );

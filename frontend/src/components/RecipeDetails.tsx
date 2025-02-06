@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface Ingredient {
   id: number;
@@ -22,6 +22,7 @@ interface RecipeDetail {
 const RecipeDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -34,6 +35,26 @@ const RecipeDetails: React.FC = () => {
         alert("Error loading recipe details.");
       });
   }, [id]);
+
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this recipe?")) {
+      axios
+        .delete(`http://localhost:3000/api/recipes/${id}`)
+        .then(() => {
+          alert("Recipe deleted successfully.");
+          navigate("/recipes"); // Redirect to recipes list
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Error deleting recipe.");
+        });
+    }
+  };
+
+  const handleEdit = () => {
+    // Navigate to an edit page
+    navigate(`/edit-recipe/${id}`);
+  };
 
   if (!recipe) {
     return <div>Loading...</div>;
@@ -64,6 +85,8 @@ const RecipeDetails: React.FC = () => {
           </li>
         ))}
       </ul>
+      <button onClick={handleEdit}>Edit Recipe</button>
+      <button onClick={handleDelete}>Delete Recipe</button>
     </div>
   );
 };

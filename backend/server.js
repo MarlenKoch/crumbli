@@ -138,7 +138,7 @@ app.get("/api/recipes/no-ingredients", (req, res) => {
 app.post("/api/recipes", (req, res) => {
   const { name, image, instructions, favorite, category, ingredients } =
     req.body;
-  if (!name || !instructions || !ingredients || ingredients.length === 0) {
+  if (!name || !instructions || !ingredients) {
     res
       .status(400)
       .send({ error: "Name, Anleitung und Zutaten sind erforderlich" });
@@ -342,15 +342,15 @@ app.get("/api/recipes/:id", (req, res) => {
   const id = req.params.id;
   db.all(
     `
-SELECT
-recipes.id AS recipeId, recipes.name, recipes.image, recipes.instructions, recipes.favorite, recipes.category,
-ingredients.id AS ingredientId, ingredients.name AS ingredientName,
-recipe_ingredients.amount, recipe_ingredients.unit
-FROM recipes
-JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
-JOIN ingredients ON recipe_ingredients.ingredient_id = ingredients.id
-WHERE recipes.id = ?
-`,
+  SELECT
+  recipes.id AS recipeId, recipes.name, recipes.image, recipes.instructions, recipes.favorite, recipes.category,
+  ingredients.id AS ingredientId, ingredients.name AS ingredientName,
+  recipe_ingredients.amount, recipe_ingredients.unit
+  FROM recipes
+  LEFT JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
+  LEFT JOIN ingredients ON recipe_ingredients.ingredient_id = ingredients.id
+  WHERE recipes.id = ?
+  `,
     [id],
     (err, rows) => {
       if (err) {
@@ -369,12 +369,18 @@ WHERE recipes.id = ?
         instructions: rows[0].instructions,
         favorite: !!rows[0].favorite,
         category: rows[0].category,
-        ingredients: rows.map((row) => ({
-          id: row.ingredientId,
-          name: row.ingredientName,
-          amount: row.amount,
-          unit: row.unit,
-        })),
+        ingredients: rows
+          .map((row) =>
+            row.ingredientId
+              ? {
+                  id: row.ingredientId,
+                  name: row.ingredientName,
+                  amount: row.amount,
+                  unit: row.unit,
+                }
+              : null
+          )
+          .filter(Boolean), // Filter out null entries if no ingredients are associated
       };
 
       res.json(structuredRecipe);
@@ -398,80 +404,75 @@ app.delete("/api/recipes/:id", (req, res) => {
   });
 });
 
-// Update a recipe's details (name, instructions, etc.) and its ingredients
-app.put("/api/recipes/:id", (req, res) => {
+//Update Recipe Details
+app.put("/api/recipes/:id/details", async (req, res) => {
   const id = req.params.id;
-  const { name, image, instructions, favorite, category, ingredients } =
-    req.body;
+  const { name, image, instructions, favorite, category } = req.body;
 
-  // Start a transaction
-  db.run("BEGIN TRANSACTION", (err) => {
-    if (err) {
-      res.status(500).send({ error: err.message });
-      return;
-    }
-
-    // Update the recipe details
-    db.run(
+  try {
+    await runAsync(
       `UPDATE recipes SET name = ?, image = ?, instructions = ?, favorite = ?, category = ? WHERE id = ?`,
-      [name, image, instructions, favorite, category, id],
-      function (err) {
-        if (err) {
-          db.run("ROLLBACK");
-          res.status(500).send({ error: err.message });
-          return;
-        }
-
-        // Update ingredients: First, delete existing ones
-        db.run(
-          "DELETE FROM recipe_ingredients WHERE recipe_id = ?",
-          [id],
-          function (err) {
-            if (err) {
-              db.run("ROLLBACK");
-              res.status(500).send({ error: err.message });
-              return;
-            }
-
-            // Insert updated ingredients
-            const ingredientInserts = [];
-            for (const ingredient of ingredients) {
-              const { ingredient_id, amount, unit } = ingredient;
-              ingredientInserts.push(
-                new Promise((resolve, reject) => {
-                  db.run(
-                    "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, unit) VALUES (?, ?, ?, ?)",
-                    [id, ingredient_id, amount, unit],
-                    (err) => {
-                      if (err) {
-                        reject(err);
-                      } else {
-                        resolve();
-                      }
-                    }
-                  );
-                })
-              );
-            }
-
-            Promise.all(ingredientInserts)
-              .then(() => {
-                db.run("COMMIT", () => {
-                  res
-                    .status(200)
-                    .send({ message: "Rezept erfolgreich aktualisiert" });
-                });
-              })
-              .catch((error) => {
-                db.run("ROLLBACK");
-                res.status(500).send({ error: error.message });
-              });
-          }
-        );
-      }
+      [name, image, instructions, favorite, category, id]
     );
-  });
+    res.status(200).send({ message: "Recipe details updated successfully" });
+  } catch (error) {
+    console.error("Error updating recipe details: ", error);
+    res.status(500).send({ error: error.message });
+  }
 });
+
+//add ingrid
+app.post("/api/recipes/:id/ingredients", async (req, res) => {
+  const id = req.params.id;
+  const { ingredients } = req.body; // List of ingredients to add
+
+  const insertPromises = ingredients.map(({ ingredient_id, amount, unit }) =>
+    runAsync(
+      "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, unit) VALUES (?, ?, ?, ?)",
+      [id, ingredient_id, amount, unit]
+    )
+  );
+
+  try {
+    await Promise.all(insertPromises);
+    res.status(200).send({ message: "Ingredients added successfully" });
+  } catch (error) {
+    console.error("Error adding ingredients: ", error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+//delete ingrid :(
+app.delete("/api/recipes/:id/ingredients", async (req, res) => {
+  const id = req.params.id;
+  const { ingredient_ids } = req.body; // List of ingredient IDs to remove
+
+  const deletePromises = ingredient_ids.map((ingredient_id) =>
+    runAsync(
+      "DELETE FROM recipe_ingredients WHERE recipe_id = ? AND ingredient_id = ?",
+      [id, ingredient_id]
+    )
+  );
+  try {
+    await Promise.all(deletePromises);
+    res.status(200).send({ message: "Ingredients removed successfully" });
+  } catch (error) {
+    console.error("Error removing ingredients: ", error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+// Helper function to run db command with a promise
+function runAsync(query, params = []) {
+  return new Promise((resolve, reject) => {
+    db.run(query, params, function (err) {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
+    });
+  });
+}
 
 // Update an ingredient's name
 app.put("/api/ingredients/:id", (req, res) => {
