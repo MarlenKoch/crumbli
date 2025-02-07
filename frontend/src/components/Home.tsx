@@ -14,6 +14,9 @@ const Home: React.FC = () => {
       <Link to="/favorites">
         <button>View Favorites</button>
       </Link>
+      <Link to="/ingredients">
+        <button>All Ingredients</button>
+      </Link>
     </div>
   );
 };

@@ -422,7 +422,6 @@ app.put("/api/recipes/:id/details", async (req, res) => {
 });
 
 //add ingrid
-
 app.post("/api/recipes/:id/ingredient", async (req, res) => {
   const recipeId = req.params.id;
   const { ingredient_id, amount, unit } = req.body; // Single ingredient details
@@ -467,6 +466,31 @@ app.delete("/api/recipes/:id/ingredients", async (req, res) => {
     console.error("Error removing ingredients: ", error);
     res.status(500).send({ error: error.message });
   }
+});
+
+//all ingrids
+
+app.get("/api/ingredients", (req, res) => {
+  db.all(
+    `
+  SELECT id, name FROM ingredients
+  `,
+    [],
+    (err, rows) => {
+      if (err) {
+        res.status(500).send({ error: err.message });
+        return;
+      }
+
+      // Map the rows to a more structured response if needed
+      const ingredients = rows.map((row) => ({
+        id: row.id,
+        name: row.name,
+      }));
+
+      res.json({ ingredients });
+    }
+  );
 });
 
 // Helper function to run db command with a promise

@@ -9,6 +9,7 @@ import Impressum from "./components/Impressum";
 import DataSafetyInformation from "./components/DataSafetyInformation";
 import FooterBar from "./components/FooterBar";
 import EditRecipe from "./components/EditRecipe";
+import IngredientList from "./components/IngredientList";
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/data-safety" element={<DataSafetyInformation />} />
           <Route path="/edit-recipe/:id" element={<EditRecipe />} />
+          <Route path="/ingredients" element={<IngredientList />} />
         </Routes>
         <FooterBar /> {/* Ensure the FooterBar is outside the Routes */}
       </div>

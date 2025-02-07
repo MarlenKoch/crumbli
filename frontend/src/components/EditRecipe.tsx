@@ -110,7 +110,6 @@ const EditRecipe: React.FC = () => {
 
   const handleAddIngredient = async () => {
     try {
-      // Check if ingredient already exists
       const response = await axios.get(
         "http://localhost:3000/api/ingredients/id",
         {
@@ -119,16 +118,13 @@ const EditRecipe: React.FC = () => {
       );
 
       const ingredientId = response.data.ingredient_id;
-      // Proceed to link this ingredient to the recipe
       await addIngredientToRecipe(ingredientId);
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        // AxiosError type guard to ensure err is an instance of AxiosError
         if (err.response && err.response.status === 404) {
           if (
             window.confirm(`${newIngredient.name} does not exist. Create it?`)
           ) {
-            // Create the ingredient
             const createResponse = await axios.post(
               "http://localhost:3000/api/ingredients",
               {
@@ -137,7 +133,6 @@ const EditRecipe: React.FC = () => {
             );
 
             const ingredientId = createResponse.data.ingredient.id;
-            // Link newly created ingredient to the recipe
             await addIngredientToRecipe(ingredientId);
           }
         }
@@ -150,14 +145,12 @@ const EditRecipe: React.FC = () => {
 
   const addIngredientToRecipe = async (ingredientId: number) => {
     try {
-      // Update API call according to Single Ingredient Addition
-      await axios.post(`http://localhost:3000/api/recipes/${id}/ingredient`, {
+      await axios.post(`/api/recipes/${id}/ingredient`, {
         ingredient_id: ingredientId,
         amount: newIngredient.amount,
         unit: newIngredient.unit,
       });
 
-      // Update recipe state to reflect new ingredient
       setRecipe((prevRecipe) => {
         if (!prevRecipe) return prevRecipe;
         return {
@@ -265,12 +258,14 @@ const EditRecipe: React.FC = () => {
         <label>
           Category:
           {isEditing.category ? (
-            <input
-              type="text"
+            <select
               value={recipe.category}
               onChange={(e) => handleDetailEdit("category", e.target.value)}
               onBlur={() => toggleEdit("category")}
-            />
+            >
+              <option value="Backen">Backen</option>
+              <option value="Kochen">Kochen</option>
+            </select>
           ) : (
             <span onClick={() => toggleEdit("category")}>
               {recipe.category}
