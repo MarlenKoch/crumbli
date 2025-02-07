@@ -235,13 +235,26 @@ const EditRecipe: React.FC = () => {
   };
 
   const handleBackToRecipe = () => {
-    if (JSON.stringify(recipe) !== JSON.stringify(originalRecipe)) {
+    // Extract only the recipe details excluding ingredients
+    const extractRecipeDetails = (recipe: RecipeDetail | null) => {
+      if (!recipe) return null;
+
+      const { id, name, image, instructions, favorite, category } = recipe;
+      return { id, name, image, instructions, favorite, category };
+    };
+
+    const currentDetails = extractRecipeDetails(recipe);
+    const originalDetails = extractRecipeDetails(originalRecipe);
+
+    // Compare only the details
+    if (JSON.stringify(currentDetails) !== JSON.stringify(originalDetails)) {
       if (window.confirm("You have unsaved changes. Save changes?")) {
         handleDetailSubmit();
       } else {
         setRecipe(originalRecipe);
       }
     }
+
     navigate(`/recipe-details/${id}`);
   };
 
