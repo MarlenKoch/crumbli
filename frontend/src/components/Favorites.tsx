@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface Recipe {
   id: number;
@@ -18,6 +19,7 @@ interface Recipe {
 
 const Favorites: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const navigate = useNavigate(); // Use navigate instead of history
 
   useEffect(() => {
     axios.get("http://localhost:3000/api/recipes/favorites").then((res) => {
@@ -39,6 +41,7 @@ const Favorites: React.FC = () => {
           </li>
         ))}
       </ul>
+      <button onClick={() => navigate(`/`)}>Back</button>
     </div>
   );
 };

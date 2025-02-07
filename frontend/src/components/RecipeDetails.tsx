@@ -87,6 +87,7 @@ const RecipeDetails: React.FC = () => {
       </ul>
       <button onClick={handleEdit}>Edit Recipe</button>
       <button onClick={handleDelete}>Delete Recipe</button>
+      <button onClick={() => navigate(`/recipes`)}>Back</button>
     </div>
   );
 };

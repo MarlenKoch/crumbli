@@ -422,22 +422,29 @@ app.put("/api/recipes/:id/details", async (req, res) => {
 });
 
 //add ingrid
-app.post("/api/recipes/:id/ingredients", async (req, res) => {
-  const id = req.params.id;
-  const { ingredients } = req.body; // List of ingredients to add
 
-  const insertPromises = ingredients.map(({ ingredient_id, amount, unit }) =>
-    runAsync(
-      "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, unit) VALUES (?, ?, ?, ?)",
-      [id, ingredient_id, amount, unit]
-    )
-  );
+app.post("/api/recipes/:id/ingredient", async (req, res) => {
+  const recipeId = req.params.id;
+  const { ingredient_id, amount, unit } = req.body; // Single ingredient details
+
+  if (!ingredient_id || !amount || !unit) {
+    // Validate required fields
+    res
+      .status(400)
+      .send({ error: "Ingredient ID, amount, and unit are required" });
+    return;
+  }
 
   try {
-    await Promise.all(insertPromises);
-    res.status(200).send({ message: "Ingredients added successfully" });
+    // Execute a single query to insert the ingredient into the recipe
+    await runAsync(
+      "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, unit) VALUES (?, ?, ?, ?)",
+      [recipeId, ingredient_id, amount, unit]
+    );
+
+    res.status(200).send({ message: "Ingredient added successfully" });
   } catch (error) {
-    console.error("Error adding ingredients: ", error);
+    console.error("Error adding ingredient: ", error);
     res.status(500).send({ error: error.message });
   }
 });

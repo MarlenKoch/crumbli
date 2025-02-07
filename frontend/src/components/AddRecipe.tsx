@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface Ingredient {
   name: string;
@@ -15,6 +16,7 @@ const AddRecipe: React.FC = () => {
   const [favorite, setFavorite] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("Kochen");
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const navigate = useNavigate(); // Use navigate instead of history
 
   const handleAddIngredient = () => {
     setIngredients([...ingredients, { name: "", amount: "", unit: "" }]);
@@ -98,6 +100,7 @@ const AddRecipe: React.FC = () => {
       })
       .then(() => {
         alert("Recipe added successfully!");
+        navigate(`/`);
       })
       .catch((err) => {
         console.error(err);
