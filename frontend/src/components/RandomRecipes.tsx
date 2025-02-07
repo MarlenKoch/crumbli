@@ -69,7 +69,7 @@ const RandomRecipes: React.FC = () => {
                 <h4>{recipes[category]!.name}</h4>
                 {recipes[category]!.image && (
                   <img
-                    src={recipes[category]!.image}
+                    src={`http://localhost:3000${recipes[category]!.image}`} // Construct full image URL
                     alt={recipes[category]!.name}
                     style={{
                       width: "150px",

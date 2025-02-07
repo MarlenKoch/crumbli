@@ -10,13 +10,17 @@ interface Recipe {
 
 const Recipes: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const navigate = useNavigate(); // Use navigate instead of history
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/recipes/no-ingredients")
       .then((res) => {
         setRecipes(res.data.recipes);
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Error loading recipes.");
       });
   }, []);
 
@@ -28,22 +32,29 @@ const Recipes: React.FC = () => {
     <div>
       <h2>Recipes</h2>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {recipes.map((recipe) => (
-          <div
-            key={recipe.id}
-            style={{ margin: "10px", cursor: "pointer" }}
-            onClick={() => handleRecipeClick(recipe.id)}
-          >
-            <h3>{recipe.name}</h3>
-            {recipe.image && (
-              <img
-                src={recipe.image}
-                alt={recipe.name}
-                style={{ width: "150px", height: "100px", objectFit: "cover" }}
-              />
-            )}
-          </div>
-        ))}
+        {recipes.map((recipe) => {
+          const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
+          return (
+            <div
+              key={recipe.id}
+              style={{ margin: "10px", cursor: "pointer" }}
+              onClick={() => handleRecipeClick(recipe.id)}
+            >
+              <h3>{recipe.name}</h3>
+              {recipe.image && (
+                <img
+                  src={imageUrl}
+                  alt={recipe.name}
+                  style={{
+                    width: "150px",
+                    height: "100px",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
       <button onClick={() => navigate(`/`)}>Back</button>
     </div>

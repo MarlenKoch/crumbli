@@ -69,26 +69,29 @@ const RecipeCategoryPage: React.FC = () => {
       <div>
         <h3>Random Recipes in {selectedCategory}</h3>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {recipes.map((recipe) => (
-            <div
-              key={recipe.id}
-              style={{ margin: "10px", cursor: "pointer" }}
-              onClick={() => handleRecipeClick(recipe.id)}
-            >
-              <h3>{recipe.name}</h3>
-              {recipe.image && (
-                <img
-                  src={recipe.image}
-                  alt={recipe.name}
-                  style={{
-                    width: "150px",
-                    height: "100px",
-                    objectFit: "cover",
-                  }}
-                />
-              )}
-            </div>
-          ))}
+          {recipes.map((recipe) => {
+            const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
+            return (
+              <div
+                key={recipe.id}
+                style={{ margin: "10px", cursor: "pointer" }}
+                onClick={() => handleRecipeClick(recipe.id)}
+              >
+                <h3>{recipe.name}</h3>
+                {recipe.image && (
+                  <img
+                    src={imageUrl}
+                    alt={recipe.name}
+                    style={{
+                      width: "150px",
+                      height: "100px",
+                      objectFit: "cover",
+                    }}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

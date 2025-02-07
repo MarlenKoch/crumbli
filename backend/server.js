@@ -602,6 +602,39 @@ app.get("/api/recipes/category/:category", (req, res) => {
   );
 });
 
+///////////////////
+//////////////////
+///Everything for picture upload
+////////////////
+///////////////
+
+const multer = require("multer");
+const path = require("path");
+
+// Set up storage configuration
+const storage = multer.diskStorage({
+  destination: "uploads/", // Folder to save the images
+  filename: (req, file, cb) => {
+    // Generate a unique filename using the current timestamp
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+// Set up middleware
+const upload = multer({ storage });
+
+// Endpoint to upload image
+app.post("/api/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
+  }
+  // Send back the file path
+  res.json({ filePath: `/uploads/${req.file.filename}` });
+});
+
+// Serve static files from the "uploads" directory
+app.use("/uploads", express.static("uploads"));
+
 // Startet den Server
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);

@@ -11,12 +11,14 @@ interface Ingredient {
 
 const AddRecipe: React.FC = () => {
   const [name, setName] = useState<string>("");
-  const [image, setImage] = useState<string>("");
+  //const [image, setImage] = useState<string>("");
   const [instructions, setInstructions] = useState<string>("");
   const [favorite, setFavorite] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("Kochen");
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const navigate = useNavigate(); // Use navigate instead of history
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePath, setImagePath] = useState<string>("");
 
   const handleAddIngredient = () => {
     setIngredients([...ingredients, { name: "", amount: "", unit: "" }]);
@@ -80,6 +82,33 @@ const AddRecipe: React.FC = () => {
     }
   };
 
+  // const handleAddRecipe = () => {
+  //   if (!name || !instructions) {
+  //     return alert("Name and instructions are required!");
+  //   }
+
+  //   axios
+  //     .post("http://localhost:3000/api/recipes", {
+  //       name,
+  //       image,
+  //       instructions,
+  //       favorite,
+  //       category,
+  //       ingredients: ingredients.map((ingredient) => ({
+  //         ingredient_id: ingredient.id,
+  //         amount: ingredient.amount,
+  //         unit: ingredient.unit,
+  //       })),
+  //     })
+  //     .then(() => {
+  //       alert("Recipe added successfully!");
+  //       navigate(`/`);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       alert("Error adding recipe.");
+  //     });
+  // };
   const handleAddRecipe = () => {
     if (!name || !instructions) {
       return alert("Name and instructions are required!");
@@ -88,7 +117,7 @@ const AddRecipe: React.FC = () => {
     axios
       .post("http://localhost:3000/api/recipes", {
         name,
-        image,
+        image: imagePath, //<-- Updated here to use uploaded image path.
         instructions,
         favorite,
         category,
@@ -108,6 +137,36 @@ const AddRecipe: React.FC = () => {
       });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (!imageFile) return;
+
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setImagePath(response.data.filePath);
+      alert("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading image.");
+    }
+  };
+
   return (
     <div>
       <h2>Add Recipe</h2>
@@ -117,12 +176,10 @@ const AddRecipe: React.FC = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <input
-        type="text"
-        placeholder="Image URL"
-        value={image}
-        onChange={(e) => setImage(e.target.value)}
-      />
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+
+      <button onClick={handleImageUpload}>Upload Image</button>
+
       <textarea
         placeholder="Instructions"
         value={instructions}
