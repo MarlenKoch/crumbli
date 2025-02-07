@@ -108,8 +108,44 @@ const EditRecipe: React.FC = () => {
       });
   };
 
+  //   const handleAddIngredient = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:3000/api/ingredients/id",
+  //         {
+  //           params: { name: newIngredient.name },
+  //         }
+  //       );
+
+  //       const ingredientId = response.data.ingredient_id;
+  //       await addIngredientToRecipe(ingredientId);
+  //     } catch (err) {
+  //       if (axios.isAxiosError(err)) {
+  //         if (err.response && err.response.status === 404) {
+  //           if (
+  //             window.confirm(`${newIngredient.name} does not exist. Create it?`)
+  //           ) {
+  //             const createResponse = await axios.post(
+  //               "http://localhost:3000/api/ingredients",
+  //               {
+  //                 name: newIngredient.name,
+  //               }
+  //             );
+
+  //             const ingredientId = createResponse.data.ingredient.id;
+  //             await addIngredientToRecipe(ingredientId);
+  //           }
+  //         }
+  //       } else {
+  //         console.error(err);
+  //         alert("Error checking ingredient existence or adding ingredient.");
+  //       }
+  //     }
+  //   };
+
   const handleAddIngredient = async () => {
     try {
+      // Attempt to find the existing ingredient
       const response = await axios.get(
         "http://localhost:3000/api/ingredients/id",
         {
@@ -117,35 +153,52 @@ const EditRecipe: React.FC = () => {
         }
       );
 
+      // Retrieve the ingredient ID from the response
       const ingredientId = response.data.ingredient_id;
-      await addIngredientToRecipe(ingredientId);
+
+      if (ingredientId) {
+        // Proceed to link this existing ingredient to the recipe
+        await addIngredientToRecipe(ingredientId);
+      } else {
+        throw new Error("Ingredient ID not found");
+      }
     } catch (err) {
       if (axios.isAxiosError(err)) {
+        // Handle a 404 response, indicating the ingredient wasn't found
         if (err.response && err.response.status === 404) {
           if (
             window.confirm(`${newIngredient.name} does not exist. Create it?`)
           ) {
-            const createResponse = await axios.post(
-              "http://localhost:3000/api/ingredients",
-              {
-                name: newIngredient.name,
-              }
-            );
+            try {
+              // Create new ingredient if confirmed
+              const createResponse = await axios.post(
+                "http://localhost:3000/api/ingredients",
+                {
+                  name: newIngredient.name,
+                }
+              );
 
-            const ingredientId = createResponse.data.ingredient.id;
-            await addIngredientToRecipe(ingredientId);
+              const newIngredientId = createResponse.data.ingredient.id;
+              await addIngredientToRecipe(newIngredientId);
+            } catch (creationError) {
+              console.error("Error creating ingredient: ", creationError);
+              alert("An error occurred while creating the new ingredient.");
+            }
           }
+        } else {
+          console.error("API error: ", err.response ?? err.message);
+          alert(`API error: ${err.response?.data?.error || err.message}`);
         }
       } else {
-        console.error(err);
-        alert("Error checking ingredient existence or adding ingredient.");
+        console.error("Unexpected error: ", err);
+        alert("Unexpected error occurred while adding the ingredient.");
       }
     }
   };
 
   const addIngredientToRecipe = async (ingredientId: number) => {
     try {
-      await axios.post(`/api/recipes/${id}/ingredient`, {
+      await axios.post(`http://localhost:3000/api/recipes/${id}/ingredient`, {
         ingredient_id: ingredientId,
         amount: newIngredient.amount,
         unit: newIngredient.unit,
