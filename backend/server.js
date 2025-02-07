@@ -535,6 +535,73 @@ app.put("/api/ingredients/:id", (req, res) => {
   );
 });
 
+// Abrufen aller Rezepte einer Kategorie
+app.get("/api/recipes/category/:category", (req, res) => {
+  const category = req.params.category;
+
+  db.all(
+    `
+  SELECT
+  recipes.id AS recipeId, recipes.name, recipes.image, recipes.instructions, recipes.favorite, recipes.category,
+  ingredients.id AS ingredientId, ingredients.name AS ingredientName,
+  recipe_ingredients.amount, recipe_ingredients.unit
+  FROM recipes
+  JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
+  JOIN ingredients ON recipe_ingredients.ingredient_id = ingredients.id
+  WHERE recipes.category = ?
+  ORDER BY recipes.id
+  `,
+    [category],
+    (err, rows) => {
+      if (err) {
+        res.status(500).send({ error: err.message });
+        return;
+      }
+
+      // Gruppieren der Daten nach Rezepten
+      const recipes = rows.reduce((acc, row) => {
+        const {
+          recipeId,
+          name,
+          image,
+          instructions,
+          favorite,
+          category,
+          ingredientId,
+          ingredientName,
+          amount,
+          unit,
+        } = row;
+
+        if (!acc[recipeId]) {
+          acc[recipeId] = {
+            id: recipeId,
+            name,
+            image,
+            instructions,
+            favorite: !!favorite,
+            category,
+            ingredients: [],
+          };
+        }
+
+        if (ingredientId && ingredientName) {
+          acc[recipeId].ingredients.push({
+            id: ingredientId,
+            name: ingredientName,
+            amount,
+            unit,
+          });
+        }
+
+        return acc;
+      }, {});
+
+      res.json({ recipes: Object.values(recipes) });
+    }
+  );
+});
+
 // Startet den Server
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);

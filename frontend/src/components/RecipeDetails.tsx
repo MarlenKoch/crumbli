@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 interface Ingredient {
   id: number;
@@ -18,11 +18,11 @@ interface RecipeDetail {
   category: string;
   ingredients: Ingredient[];
 }
-
 const RecipeDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     axios
@@ -42,7 +42,7 @@ const RecipeDetails: React.FC = () => {
         .delete(`http://localhost:3000/api/recipes/${id}`)
         .then(() => {
           alert("Recipe deleted successfully.");
-          navigate("/recipes"); // Redirect to recipes list
+          navigate("/");
         })
         .catch((err) => {
           console.error(err);
@@ -52,8 +52,17 @@ const RecipeDetails: React.FC = () => {
   };
 
   const handleEdit = () => {
-    // Navigate to an edit page
     navigate(`/edit-recipe/${id}`);
+  };
+
+  const handleBack = () => {
+    const queryParams = new URLSearchParams(location.search);
+    const from = queryParams.get("from");
+    if (from) {
+      navigate(-1); // Go back to the previous page if 'from' parameter is present
+    } else {
+      navigate("/"); // Default action to navigate to the home page
+    }
   };
 
   if (!recipe) {
@@ -87,7 +96,7 @@ const RecipeDetails: React.FC = () => {
       </ul>
       <button onClick={handleEdit}>Edit Recipe</button>
       <button onClick={handleDelete}>Delete Recipe</button>
-      <button onClick={() => navigate(`/recipes`)}>Back</button>
+      <button onClick={handleBack}>Back</button>
     </div>
   );
 };

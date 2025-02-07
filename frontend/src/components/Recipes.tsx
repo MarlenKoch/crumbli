@@ -21,7 +21,7 @@ const Recipes: React.FC = () => {
   }, []);
 
   const handleRecipeClick = (id: number) => {
-    navigate(`/recipe-details/${id}`);
+    navigate(`/recipe-details/${id}?from=recipes`);
   };
 
   return (

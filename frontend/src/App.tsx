@@ -10,11 +10,14 @@ import DataSafetyInformation from "./components/DataSafetyInformation";
 import FooterBar from "./components/FooterBar";
 import EditRecipe from "./components/EditRecipe";
 import IngredientList from "./components/IngredientList";
+import PizzaWerbung from "./components/PizzaWerbung";
+import HeaderBar from "./components/HeaderBar";
 
 const App: React.FC = () => {
   return (
     <Router>
       <div>
+        <HeaderBar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/recipes" element={<Recipes />} />
@@ -23,6 +26,7 @@ const App: React.FC = () => {
           <Route path="/recipe-details/:id" element={<RecipeDetails />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/data-safety" element={<DataSafetyInformation />} />
+          <Route path="/pizza-ist-toll" element={<PizzaWerbung />} />
           <Route path="/edit-recipe/:id" element={<EditRecipe />} />
           <Route path="/ingredients" element={<IngredientList />} />
         </Routes>

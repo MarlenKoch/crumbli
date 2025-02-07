@@ -12,6 +12,9 @@ const FooterBar: React.FC = () => {
       <Link to="/data-safety" style={{ margin: "0 10px" }}>
         Data Safety Information
       </Link>
+      <Link to="/pizza-ist-toll" style={{ margin: "0 10px" }}>
+        Warum Pizza toll ist
+      </Link>
     </footer>
   );
 };
