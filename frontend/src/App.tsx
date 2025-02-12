@@ -12,6 +12,7 @@ import EditRecipe from "./components/EditRecipe";
 import IngredientList from "./components/IngredientList";
 import PizzaWerbung from "./components/PizzaWerbung";
 import HeaderBar from "./components/HeaderBar";
+import "./App.css";
 
 const App: React.FC = () => {
   return (

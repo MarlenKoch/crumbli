@@ -66,3 +66,18 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.container {
+  display: flex; /* Use flexbox layout */
+  /* Optionally, add other styles like */
+  justify-content: space-between; /* Align items with space between them */
+  align-items: center; /* Vertically center the items */
+  /* Also optional: */
+  gap: 10px; /* Space between items */
+}
+
+.item {
+  padding: 10px;
+  border: 1px solid #333;
+  background-color: #f0f0f0;
+}

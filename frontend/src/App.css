@@ -55,3 +55,30 @@
   border: 1px solid #333;
   background-color: #f0f0f0;
 }
+
+.squareButton {
+  display: inline-block;
+  padding: 20px;
+  width: 150px; /* Adjust width as needed */
+  height: 150px; /* Adjust height as needed */
+  background-color: #e0e0e0; /* Light gray background color */
+  color: hsl(0, 0%, 20%); /* Text color */
+  border: none;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for 3D effect */
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s; /* Animation for interactive feel */
+  margin: 10px; /* Padding to the side */
+}
+
+.squareButton:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+}
+
+.squareButton:active {
+  transform: translateY(0px); /* No lift when active */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Pressed effect */
+}
