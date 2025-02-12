@@ -96,7 +96,7 @@ const RecipeDetails: React.FC = () => {
       <ul>
         {recipe.ingredients.map((ingredient) => (
           <li key={ingredient.id}>
-            {ingredient.amount} {ingredient.unit} of {ingredient.name}
+            {ingredient.amount} {ingredient.unit} {ingredient.name}
           </li>
         ))}
       </ul>
