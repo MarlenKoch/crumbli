@@ -220,14 +220,25 @@ const AddRecipe: React.FC = () => {
               handleIngredientChange(index, "amount", e.target.value)
             }
           />
-          <input
-            type="text"
-            placeholder="Unit"
-            value={ingredient.unit}
+
+          <select
             onChange={(e) =>
               handleIngredientChange(index, "unit", e.target.value)
             }
-          />
+          >
+            <option value="TL">TL</option>
+            <option value="EL">EL</option>
+            <option value="Pck">Pck</option>
+            <option value="Tasse">Tasse</option>
+            <option value="g">g</option>
+            <option value="Kg">Kg</option>
+            <option value="l">l</option>
+            <option value="Blt">Blt</option>
+            <option value="ml">ml</option>
+            <option value="Prise">Prise</option>
+            <option value="Tropfen">Tropfen</option>
+            <option value=" ">-</option>
+          </select>
         </div>
       ))}
       <button onClick={handleAddIngredient}>Add Ingredient</button>
