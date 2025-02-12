@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   return (
     <div>
       <div className="container">
-        <p>CRÜMBLI</p>
+        <p className="big-header">CRÜMBLI</p>
         <RecipeSearchBar />
       </div>
       <div className="container">
@@ -18,6 +18,7 @@ const Home: React.FC = () => {
           <div>
             <p>diese App ist toll</p>
             <p>hier kommt noch ein bild hin</p>
+            <img src="cookie.svg"></img>
           </div>
           <div className="container">
             <Link to="/recipes">

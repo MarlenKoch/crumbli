@@ -74,11 +74,52 @@
 }
 
 .squareButton:hover {
-  transform: translateY(-2px); /* Slight lift on hover */
+  transform: scale(1.05); /* Slight lift on hover */
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
 }
 
 .squareButton:active {
   transform: translateY(0px); /* No lift when active */
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Pressed effect */
+}
+
+.big-header {
+  font-size: 2cm;
+  font-weight: bold;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+}
+
+.search-bar {
+  position: relative; /* Set the container position relative */
+  margin-bottom: 20px; /* Add margin to separate from other elements */
+}
+
+.search-bar input {
+  width: 100%; /* Make input fill the width of the container */
+  padding: 8px; /* Add some padding for better usability */
+  font-size: 16px; /* Increase font size for better readability */
+}
+
+.search-results {
+  position: absolute; /* Absolute position within relatively positioned container */
+  top: 100%; /* Position just below the input field */
+  left: 0;
+  right: 0; /* Make sure it covers the full width of the input */
+  border: 1px solid #ddd; /* Light border for distinction */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1; /* Ensure it appears above other page elements */
+  overflow-y: auto; /* Enable scrolling if needed */
+  list-style-type: none; /* Remove default list styling */
+  margin: 0; /* Remove margin */
+  padding: 0; /* Remove padding */
+}
+
+.search-results li {
+  padding: 10px; /* Padding for list items */
+  cursor: pointer; /* Pointer cursor for clickable elements */
+}
+
+.search-results li:hover {
+  background-color: #f0f0f0; /* Light background on hover for better user interaction */
 }
