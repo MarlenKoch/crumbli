@@ -27,27 +27,37 @@ const Favorites: React.FC = () => {
     });
   }, []);
 
+  const handleRecipeClick = (id: number) => {
+    navigate(`/recipe-details/${id}?from=favorites`);
+  };
+
   return (
     <div>
       <h2>Favorite Recipes</h2>
-      <ul>
-        {recipes.map((recipe) => {
-          const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
-          return (
-            <li key={recipe.id}>
-              <h3>{recipe.name}</h3>
-              <img
-                src={imageUrl}
-                alt={recipe.name}
-                style={{ width: "150px", height: "100px", objectFit: "cover" }}
-              />
-              <p>{recipe.instructions}</p>
-              <p>Category: {recipe.category}</p>
-              <p>Favorite: {recipe.favorite ? "Yes" : "No"}</p>
-            </li>
-          );
-        })}
-      </ul>
+      <div className="container-scrollable">
+        <ul>
+          {recipes.map((recipe) => {
+            const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
+            return (
+              <li key={recipe.id} onClick={() => handleRecipeClick(recipe.id)}>
+                <h3>{recipe.name}</h3>
+                <img
+                  src={imageUrl}
+                  alt={recipe.name}
+                  style={{
+                    width: "600px",
+                    height: "200px",
+                    objectFit: "cover",
+                  }}
+                />
+                <p>{recipe.instructions}</p>
+                <p>Category: {recipe.category}</p>
+                <p>Favorite: {recipe.favorite ? "Yes" : "No"}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
       <button onClick={() => navigate(`/`)}>Back</button>
     </div>
   );

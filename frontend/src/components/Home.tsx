@@ -7,18 +7,17 @@ import "../App.css";
 
 const Home: React.FC = () => {
   return (
-    <div>
-      <div className="container">
+    <div className="container-vertical">
+      <div className="container-fullscreen">
         <p className="big-header">CRÜMBLI</p>
         <RecipeSearchBar />
       </div>
       <div className="container">
         <RandomRecipes />
-        <div>
-          <div>
+        <div className="container-vertical">
+          <div className="container-vertical">
             <p>diese App ist toll</p>
-            <p>hier kommt noch ein bild hin</p>
-            <img src="cookie.svg"></img>
+            <img src="cake.png"></img>
           </div>
           <div className="container">
             <Link to="/recipes">

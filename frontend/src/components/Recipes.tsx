@@ -31,14 +31,14 @@ const Recipes: React.FC = () => {
   return (
     <div>
       <h2>Recipes</h2>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div className="container-scrollable-wrap">
         {recipes.map((recipe) => {
           const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
           return (
             <div
               key={recipe.id}
-              style={{ margin: "10px", cursor: "pointer" }}
               onClick={() => handleRecipeClick(recipe.id)}
+              className="squareButton"
             >
               <h3>{recipe.name}</h3>
               {recipe.image && (

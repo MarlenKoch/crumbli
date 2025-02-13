@@ -19,18 +19,20 @@ const App: React.FC = () => {
     <Router>
       <div>
         <HeaderBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/recipes" element={<Recipes />} />
-          <Route path="/add-recipe" element={<AddRecipe />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/recipe-details/:id" element={<RecipeDetails />} />
-          <Route path="/impressum" element={<Impressum />} />
-          <Route path="/data-safety" element={<DataSafetyInformation />} />
-          <Route path="/pizza-ist-toll" element={<PizzaWerbung />} />
-          <Route path="/edit-recipe/:id" element={<EditRecipe />} />
-          <Route path="/ingredients" element={<IngredientList />} />
-        </Routes>
+        <div className="container-fullscreen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/recipes" element={<Recipes />} />
+            <Route path="/add-recipe" element={<AddRecipe />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/recipe-details/:id" element={<RecipeDetails />} />
+            <Route path="/impressum" element={<Impressum />} />
+            <Route path="/data-safety" element={<DataSafetyInformation />} />
+            <Route path="/pizza-ist-toll" element={<PizzaWerbung />} />
+            <Route path="/edit-recipe/:id" element={<EditRecipe />} />
+            <Route path="/ingredients" element={<IngredientList />} />
+          </Routes>
+        </div>
         <FooterBar /> {/* Ensure the FooterBar is outside the Routes */}
       </div>
     </Router>
