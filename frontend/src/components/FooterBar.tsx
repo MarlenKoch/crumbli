@@ -8,11 +8,15 @@ const FooterBar: React.FC = () => {
         <Link to="/impressum" className="white-link">
           Impressum
         </Link>
-        <Link to="/data-safety">Data Safety Information</Link>
-        <Link to="/pizza-ist-toll">Warum Pizza toll ist</Link>
-        <li>
-          <a href="/link3">Link 3</a>
-        </li>
+        <Link to="/data-safety" className="white-link">
+          Data Safety Information
+        </Link>
+        <Link to="/pizza-ist-toll" className="white-link">
+          Warum Pizza toll ist
+        </Link>
+        <Link to="/ueber-uns" className="white-link">
+          Über uns
+        </Link>
       </ul>
     </footer>
   );

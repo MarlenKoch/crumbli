@@ -55,7 +55,8 @@ const RecipeSearchBar: React.FC = () => {
       searchContainerRef.current &&
       !searchContainerRef.current.contains(event.target as Node)
     ) {
-      setSearchResults([]); // Hide results if clicking outside
+      setSearchQuery(""); // Reset search bar
+      setSearchResults([]); // Clear results
     }
   };
 

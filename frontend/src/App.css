@@ -250,7 +250,7 @@ button:hover {
   width: 100%;
   max-width: 400px;
   padding: 10px;
-  border: 2px solid rgb(0, 255, 213);
+  border: 2px solid var(--green1);
   /* Remove border to connect visually with results */
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -259,17 +259,21 @@ button:hover {
   font-size: 16px;
   transition: border-color 0.3s;
   z-index: 1;
+  color: var(--green1);
 }
 
 /* Focus state for Input Field */
 .search-input:focus {
+  border-color: var(--brown2);
+  color: var(--brown2);
 }
 
 .search-input.has-results {
-  border-color: #ff0000;
+  border-color: var(--brown2);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom: none;
+  color: var(--brown2);
 }
 
 /* Search Results List */
@@ -279,8 +283,8 @@ button:hover {
   padding: 10px;
   width: 100%;
   max-width: 400px;
-  background-color: #2aa9c0;
-  border: 2px solid #ff0000;
+  background-color: var(--brown2);
+  border: 2px solid var(--brown2);
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -296,16 +300,23 @@ button:hover {
 .search-results li {
   padding: 10px;
   cursor: pointer;
-  border-bottom: 1px solid #0077ff;
   transition: background-color 0.3s;
+  border-radius: 5px;
 }
 
 /* Hover effect for Search Result Item */
 .search-results li:hover {
-  background-color: #2cb1d5;
+  background-color: var(--brown3);
 }
 
-/* Last Item Border Adjustment */
-.search-results li:last-child {
-  border-bottom: none;
+.text-with-bg {
+  /* position: absolute; Position relative to .recipe-box */
+  top: 600px; /* Align to the bottom of the box */
+  left: 0; /* Align to the left edge */
+  width: 95%; /* Cover the full width of the box */
+  height: 30%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  color: #ffffff; /* Text color */
+  padding: 10px; /* Space around the text */
+  /* box-sizing: border-box; Include padding in the element's total width and height */
 }

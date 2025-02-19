@@ -38,10 +38,18 @@ const Recipes: React.FC = () => {
             <div
               key={recipe.id}
               onClick={() => handleRecipeClick(recipe.id)}
-              className="squareButton"
+              style={{
+                backgroundImage: `url(${imageUrl})`,
+                backgroundSize: "cover", // Optional: Add to make the image cover the div
+                backgroundPosition: "center",
+                height: 270,
+                width: 270,
+                borderRadius: 10,
+              }}
             >
-              <h3>{recipe.name}</h3>
-              {recipe.image && (
+              <h3 className="text-with-bg">{recipe.name}</h3>
+
+              {/* {recipe.image && (
                 <img
                   src={imageUrl}
                   alt={recipe.name}
@@ -51,7 +59,7 @@ const Recipes: React.FC = () => {
                     objectFit: "cover",
                   }}
                 />
-              )}
+              )} */}
             </div>
           );
         })}

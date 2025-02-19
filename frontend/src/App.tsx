@@ -12,6 +12,7 @@ import EditRecipe from "./components/EditRecipe";
 import IngredientList from "./components/IngredientList";
 import PizzaWerbung from "./components/PizzaWerbung";
 import HeaderBar from "./components/HeaderBar";
+import UeberUns from "./components/UeberUns";
 import "./App.css";
 
 const App: React.FC = () => {
@@ -31,6 +32,7 @@ const App: React.FC = () => {
             <Route path="/pizza-ist-toll" element={<PizzaWerbung />} />
             <Route path="/edit-recipe/:id" element={<EditRecipe />} />
             <Route path="/ingredients" element={<IngredientList />} />
+            <Route path="/ueber-uns" element={<UeberUns />} />
           </Routes>
         </div>
         <FooterBar /> {/* Ensure the FooterBar is outside the Routes */}
