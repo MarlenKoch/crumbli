@@ -46,6 +46,7 @@ const Recipes: React.FC = () => {
                 width: 270,
                 borderRadius: 10,
               }}
+              className="image-button"
             >
               <h3 className="text-with-bg">{recipe.name}</h3>
 

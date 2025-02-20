@@ -320,3 +320,7 @@ button:hover {
   padding: 10px; /* Space around the text */
   /* box-sizing: border-box; Include padding in the element's total width and height */
 }
+
+.image-button:hover {
+  transform: scale(1.05);
+}

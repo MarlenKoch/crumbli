@@ -391,16 +391,24 @@ const EditRecipe: React.FC = () => {
               }
             />
           </label>
-          <label>
-            Unit:
-            <input
-              type="text"
-              value={newIngredient.unit}
-              onChange={(e) =>
-                setNewIngredient({ ...newIngredient, unit: e.target.value })
-              }
-            />
-          </label>
+          <select
+            onChange={(e) =>
+              setNewIngredient({ ...newIngredient, unit: e.target.value })
+            }
+          >
+            <option value="TL">TL</option>
+            <option value="EL">EL</option>
+            <option value="Pck">Pck</option>
+            <option value="Tasse">Tasse</option>
+            <option value="g">g</option>
+            <option value="Kg">Kg</option>
+            <option value="l">l</option>
+            <option value="Blt">Blt</option>
+            <option value="ml">ml</option>
+            <option value="Prise">Prise</option>
+            <option value="Tropfen">Tropfen</option>
+            <option value=" ">-</option>
+          </select>
           <button onClick={handleAddIngredient}>Add Ingredient</button>
           <button onClick={resetIngredientModal}>Cancel</button>
         </div>
