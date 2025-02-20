@@ -354,7 +354,7 @@ const EditRecipe: React.FC = () => {
         <ul>
           {recipe.ingredients.map((ingredient) => (
             <li key={ingredient.id}>
-              {ingredient.amount} {ingredient.unit} of {ingredient.name}{" "}
+              {ingredient.amount} {ingredient.unit} {ingredient.name}{" "}
               <button onClick={() => handleIngredientDelete(ingredient.id)}>
                 Delete
               </button>
@@ -365,8 +365,6 @@ const EditRecipe: React.FC = () => {
           Add Ingredient
         </button>
       </div>
-
-      <button onClick={handleBackToRecipe}>Back to Recipe</button>
 
       {isAddingIngredient && (
         <div className="ingredient-modal">
@@ -413,6 +411,7 @@ const EditRecipe: React.FC = () => {
           <button onClick={resetIngredientModal}>Cancel</button>
         </div>
       )}
+      <button onClick={handleBackToRecipe}>Back to Recipe</button>
     </div>
   );
 };
