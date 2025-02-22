@@ -468,6 +468,31 @@ app.delete("/api/recipes/:id/ingredients", async (req, res) => {
   }
 });
 
+// Update the amount and unit of an ingredient in a recipe
+app.put(
+  "/api/recipes/:recipeId/ingredients/:ingredientId",
+  async (req, res) => {
+    const { recipeId, ingredientId } = req.params;
+    const { amount, unit } = req.body;
+
+    // Validation
+    if (!amount || !unit) {
+      return res.status(400).send({ error: "Amount and unit are required" });
+    }
+
+    try {
+      await runAsync(
+        `UPDATE recipe_ingredients SET amount = ?, unit = ? WHERE recipe_id = ? AND ingredient_id = ?`,
+        [amount, unit, recipeId, ingredientId]
+      );
+      res.status(200).send({ message: "Ingredient updated successfully" });
+    } catch (error) {
+      console.error("Error updating ingredient: ", error);
+      res.status(500).send({ error: error.message });
+    }
+  }
+);
+
 //all ingrids
 
 app.get("/api/ingredients", (req, res) => {
