@@ -35,9 +35,10 @@ const EditRecipe: React.FC = () => {
     amount: "",
     unit: "",
   });
-  const [originalRecipe, setOriginalRecipe] = useState<RecipeDetail | null>(
-    null
-  );
+  // const [originalRecipe, setOriginalRecipe] = useState<RecipeDetail | null>(
+  //   null
+  // );
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,19 +46,13 @@ const EditRecipe: React.FC = () => {
       .get(`http://localhost:3000/api/recipes/${id}`)
       .then((res) => {
         setRecipe(res.data);
-        setOriginalRecipe(res.data);
+        //setOriginalRecipe(res.data);
       })
       .catch((err) => {
         console.error(err);
         alert("Error loading recipe details.");
       });
   }, [id]);
-
-  const handleDetailEdit = (field: keyof RecipeDetail, value: unknown) => {
-    if (recipe) {
-      setRecipe({ ...recipe, [field]: value });
-    }
-  };
 
   const handleIngredientDelete = (ingredientId: number) => {
     if (recipe) {
@@ -80,68 +75,6 @@ const EditRecipe: React.FC = () => {
         });
     }
   };
-
-  const handleDetailSubmit = () => {
-    if (!recipe) return;
-    axios
-      .put(`http://localhost:3000/api/recipes/${id}/details`, {
-        name: recipe.name,
-        image: recipe.image,
-        instructions: recipe.instructions,
-        favorite: recipe.favorite,
-        category: recipe.category,
-      })
-      .then(() => {
-        alert("Recipe details updated successfully.");
-        setOriginalRecipe(recipe);
-        setIsEditing({
-          name: false,
-          image: false,
-          instructions: false,
-          category: false,
-          favorite: false,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Error updating recipe details.");
-      });
-  };
-
-  //   const handleAddIngredient = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "http://localhost:3000/api/ingredients/id",
-  //         {
-  //           params: { name: newIngredient.name },
-  //         }
-  //       );
-
-  //       const ingredientId = response.data.ingredient_id;
-  //       await addIngredientToRecipe(ingredientId);
-  //     } catch (err) {
-  //       if (axios.isAxiosError(err)) {
-  //         if (err.response && err.response.status === 404) {
-  //           if (
-  //             window.confirm(`${newIngredient.name} does not exist. Create it?`)
-  //           ) {
-  //             const createResponse = await axios.post(
-  //               "http://localhost:3000/api/ingredients",
-  //               {
-  //                 name: newIngredient.name,
-  //               }
-  //             );
-
-  //             const ingredientId = createResponse.data.ingredient.id;
-  //             await addIngredientToRecipe(ingredientId);
-  //           }
-  //         }
-  //       } else {
-  //         console.error(err);
-  //         alert("Error checking ingredient existence or adding ingredient.");
-  //       }
-  //     }
-  //   };
 
   const handleAddIngredient = async () => {
     try {
@@ -227,6 +160,71 @@ const EditRecipe: React.FC = () => {
     }
   };
 
+  const handleDetailSubmit = async () => {
+    if (!recipe) return;
+
+    let imagePath = recipe.image; // Default to existing image
+
+    // Upload new image if available
+    if (imageFile) {
+      try {
+        const formData = new FormData();
+        formData.append("image", imageFile);
+        const response = await axios.post(
+          "http://localhost:3000/api/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        imagePath = response.data.filePath;
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        alert("Error uploading new image.");
+        return;
+      }
+    }
+
+    axios
+      .put(`http://localhost:3000/api/recipes/${id}/details`, {
+        name: recipe.name,
+        image: imagePath, // Use new image path if changed
+        instructions: recipe.instructions,
+        favorite: recipe.favorite,
+        category: recipe.category,
+      })
+      .then(() => {
+        alert("Recipe details updated successfully.");
+        //setOriginalRecipe({ ...recipe, image: imagePath });
+        setImageFile(null); // Reset image file after saving
+        setIsEditing({
+          name: false,
+          image: false,
+          instructions: false,
+          category: false,
+          favorite: false,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Error updating recipe details.");
+      });
+  };
+
+  const handleDetailEdit = (field: keyof RecipeDetail, value: unknown) => {
+    if (recipe) {
+      setRecipe({ ...recipe, [field]: value });
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
   const toggleEdit = (field: keyof typeof isEditing) => {
     setIsEditing((prevState) => ({
       ...prevState,
@@ -235,26 +233,7 @@ const EditRecipe: React.FC = () => {
   };
 
   const handleBackToRecipe = () => {
-    // Extract only the recipe details excluding ingredients
-    const extractRecipeDetails = (recipe: RecipeDetail | null) => {
-      if (!recipe) return null;
-
-      const { id, name, image, instructions, favorite, category } = recipe;
-      return { id, name, image, instructions, favorite, category };
-    };
-
-    const currentDetails = extractRecipeDetails(recipe);
-    const originalDetails = extractRecipeDetails(originalRecipe);
-
-    // Compare only the details
-    if (JSON.stringify(currentDetails) !== JSON.stringify(originalDetails)) {
-      if (window.confirm("You have unsaved changes. Save changes?")) {
-        handleDetailSubmit();
-      } else {
-        setRecipe(originalRecipe);
-      }
-    }
-
+    handleDetailSubmit();
     navigate(`/recipe-details/${id}`);
   };
 
@@ -266,6 +245,8 @@ const EditRecipe: React.FC = () => {
   if (!recipe) {
     return <div>Loading...</div>;
   }
+
+  const imageSrc = `http://localhost:3000${recipe.image}`;
 
   return (
     <div>
@@ -289,16 +270,24 @@ const EditRecipe: React.FC = () => {
 
       <div>
         <label>
-          Image URL:
+          Image:
           {isEditing.image ? (
-            <input
-              type="text"
-              value={recipe.image}
-              onChange={(e) => handleDetailEdit("image", e.target.value)}
-              onBlur={() => toggleEdit("image")}
-            />
+            <div>
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+              <button onClick={() => setImageFile(null)}>Cancel</button>
+            </div>
           ) : (
-            <span onClick={() => toggleEdit("image")}>{recipe.image}</span>
+            <img
+              src={imageSrc}
+              alt="current"
+              onClick={() => toggleEdit("image")}
+              style={{
+                cursor: "pointer",
+                width: "150px",
+                height: "100px",
+                objectFit: "cover",
+              }}
+            />
           )}
         </label>
       </div>

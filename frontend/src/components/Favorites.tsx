@@ -31,15 +31,22 @@ const Favorites: React.FC = () => {
     <div>
       <h2>Favorite Recipes</h2>
       <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}>
-            <h3>{recipe.name}</h3>
-            <img src={recipe.image} alt={recipe.name} />
-            <p>{recipe.instructions}</p>
-            <p>Category: {recipe.category}</p>
-            <p>Favorite: {recipe.favorite ? "Yes" : "No"}</p>
-          </li>
-        ))}
+        {recipes.map((recipe) => {
+          const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
+          return (
+            <li key={recipe.id}>
+              <h3>{recipe.name}</h3>
+              <img
+                src={imageUrl}
+                alt={recipe.name}
+                style={{ width: "150px", height: "100px", objectFit: "cover" }}
+              />
+              <p>{recipe.instructions}</p>
+              <p>Category: {recipe.category}</p>
+              <p>Favorite: {recipe.favorite ? "Yes" : "No"}</p>
+            </li>
+          );
+        })}
       </ul>
       <button onClick={() => navigate(`/`)}>Back</button>
     </div>

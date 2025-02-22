@@ -12,12 +12,13 @@ interface Ingredient {
 interface RecipeDetail {
   id: number;
   name: string;
-  image: string;
+  image: string; // Should store the relative path, like "/uploads/{filename}"
   instructions: string;
   favorite: boolean;
   category: string;
   ingredients: Ingredient[];
 }
+
 const RecipeDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
@@ -58,8 +59,10 @@ const RecipeDetails: React.FC = () => {
   const handleBack = () => {
     const queryParams = new URLSearchParams(location.search);
     const from = queryParams.get("from");
-    if (from) {
-      navigate(-1); // Go back to the previous page if 'from' parameter is present
+    if (from == "recipes") {
+      navigate("/recipes"); // Go back to the previous page if 'from' parameter is present
+    } else if (from) {
+      navigate(-1);
     } else {
       navigate("/"); // Default action to navigate to the home page
     }
@@ -69,11 +72,14 @@ const RecipeDetails: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  // Ensure that the image path is prefixed with the correct base URL
+  const imageSrc = `http://localhost:3000${recipe.image}`;
+
   return (
     <div>
       <h2>{recipe.name}</h2>
       <img
-        src={recipe.image}
+        src={imageSrc}
         alt={recipe.name}
         style={{ width: "300px", height: "200px", objectFit: "cover" }}
       />
