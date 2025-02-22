@@ -31,17 +31,26 @@ const Recipes: React.FC = () => {
   return (
     <div>
       <h2>Recipes</h2>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div className="container-scrollable-wrap">
         {recipes.map((recipe) => {
           const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
           return (
             <div
               key={recipe.id}
-              style={{ margin: "10px", cursor: "pointer" }}
               onClick={() => handleRecipeClick(recipe.id)}
+              style={{
+                backgroundImage: `url(${imageUrl})`,
+                backgroundSize: "cover", // Optional: Add to make the image cover the div
+                backgroundPosition: "center",
+                height: 270,
+                width: 270,
+                borderRadius: 10,
+              }}
+              className="image-button"
             >
-              <h3>{recipe.name}</h3>
-              {recipe.image && (
+              <h3 className="text-with-bg">{recipe.name}</h3>
+
+              {/* {recipe.image && (
                 <img
                   src={imageUrl}
                   alt={recipe.name}
@@ -51,7 +60,7 @@ const Recipes: React.FC = () => {
                     objectFit: "cover",
                   }}
                 />
-              )}
+              )} */}
             </div>
           );
         })}

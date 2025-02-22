@@ -76,7 +76,7 @@ const RecipeDetails: React.FC = () => {
   const imageSrc = `http://localhost:3000${recipe.image}`;
 
   return (
-    <div>
+    <div className="container-scrollable">
       <h2>{recipe.name}</h2>
       <img
         src={imageSrc}
@@ -96,7 +96,7 @@ const RecipeDetails: React.FC = () => {
       <ul>
         {recipe.ingredients.map((ingredient) => (
           <li key={ingredient.id}>
-            {ingredient.amount} {ingredient.unit} of {ingredient.name}
+            {ingredient.amount} {ingredient.unit} {ingredient.name}
           </li>
         ))}
       </ul>

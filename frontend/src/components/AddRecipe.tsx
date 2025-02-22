@@ -168,41 +168,61 @@ const AddRecipe: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="add-recipe-container">
       <h2>Add Recipe</h2>
-      <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-
-      <button onClick={handleImageUpload}>Upload Image</button>
-
-      <textarea
-        placeholder="Instructions"
-        value={instructions}
-        onChange={(e) => setInstructions(e.target.value)}
-      />
-      <label>
-        Favorite:
+      <div className="form-group">
         <input
-          type="checkbox"
-          checked={favorite}
-          onChange={(e) => setFavorite(e.target.checked)}
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="input-field"
         />
-      </label>
-      <label>
-        Category:
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="Kochen">Kochen</option>
-          <option value="Backen">Backen</option>
-        </select>
-      </label>
+      </div>
+      <div className="form-group">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="input-file"
+        />
+        <button onClick={handleImageUpload} className="upload-button">
+          Upload Image
+        </button>
+      </div>
+
+      <div className="form-group">
+        <textarea
+          placeholder="Instructions"
+          value={instructions}
+          onChange={(e) => setInstructions(e.target.value)}
+          className="textarea-field"
+        />
+      </div>
+      <div className="form-group-inline">
+        <label>
+          Favorite:
+          <input
+            type="checkbox"
+            checked={favorite}
+            onChange={(e) => setFavorite(e.target.checked)}
+          />
+        </label>
+        <label>
+          Category:
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="select-field"
+          >
+            <option value="Kochen">Kochen</option>
+            <option value="Backen">Backen</option>
+          </select>
+        </label>
+      </div>
       <h3>Ingredients</h3>
       {ingredients.map((ingredient, index) => (
-        <div key={index}>
+        <div className="ingredient-group" key={index}>
           <input
             type="text"
             placeholder="Ingredient Name"
@@ -211,6 +231,7 @@ const AddRecipe: React.FC = () => {
               handleIngredientChange(index, "name", e.target.value)
             }
             onBlur={() => checkAndAddIngredient(ingredient.name, index)}
+            className="input-field"
           />
           <input
             type="text"
@@ -219,19 +240,35 @@ const AddRecipe: React.FC = () => {
             onChange={(e) =>
               handleIngredientChange(index, "amount", e.target.value)
             }
+            className="input-field"
           />
-          <input
-            type="text"
-            placeholder="Unit"
-            value={ingredient.unit}
+          <select
             onChange={(e) =>
               handleIngredientChange(index, "unit", e.target.value)
             }
-          />
+            className="select-field"
+          >
+            <option value="TL">TL</option>
+            <option value="EL">EL</option>
+            <option value="Pck">Pck</option>
+            <option value="Tasse">Tasse</option>
+            <option value="g">g</option>
+            <option value="Kg">Kg</option>
+            <option value="l">l</option>
+            <option value="Blt">Blt</option>
+            <option value="ml">ml</option>
+            <option value="Prise">Prise</option>
+            <option value="Tropfen">Tropfen</option>
+            <option value=" ">-</option>
+          </select>
         </div>
       ))}
-      <button onClick={handleAddIngredient}>Add Ingredient</button>
-      <button onClick={handleAddRecipe}>Add Recipe</button>
+      <button onClick={handleAddIngredient} className="action-button">
+        Add Ingredient
+      </button>
+      <button onClick={handleAddRecipe} className="action-button">
+        Add Recipe
+      </button>
     </div>
   );
 };

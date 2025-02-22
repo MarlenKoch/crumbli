@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +15,7 @@ const RecipeSearchBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Recipe[]>([]);
   const navigate = useNavigate();
+  const searchContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (searchQuery.length > 0) {
@@ -49,23 +50,45 @@ const RecipeSearchBar: React.FC = () => {
     setSearchResults([]); // Clear results
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      searchContainerRef.current &&
+      !searchContainerRef.current.contains(event.target as Node)
+    ) {
+      setSearchQuery(""); // Reset search bar
+      setSearchResults([]); // Clear results
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="search-bar">
-      <input
-        type="text"
-        placeholder="Search for recipes..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
-      {searchResults.length > 0 && (
-        <ul className="search-results">
-          {searchResults.map((recipe) => (
-            <li key={recipe.id} onClick={() => handleResultClick(recipe.id)}>
-              {recipe.name}
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="search-bar" ref={searchContainerRef}>
+      <div className="search-container">
+        <input
+          type="text"
+          className={`search-input ${
+            searchResults.length > 0 ? "has-results" : ""
+          }`}
+          placeholder="Search for recipes..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+        {searchResults.length > 0 && (
+          <ul className="search-results">
+            {searchResults.map((recipe) => (
+              <li key={recipe.id} onClick={() => handleResultClick(recipe.id)}>
+                {recipe.name}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

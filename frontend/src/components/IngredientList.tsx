@@ -48,7 +48,7 @@ const IngredientList: React.FC = () => {
   return (
     <div>
       <h2>Ingredient List</h2>
-      <ul>
+      <ul className="container-scrollable">
         {ingredients.map((ingredient) => (
           <li key={ingredient.id}>{ingredient.name}</li>
         ))}

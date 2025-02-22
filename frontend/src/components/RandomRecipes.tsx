@@ -56,7 +56,6 @@ const RandomRecipes: React.FC = () => {
 
   return (
     <div>
-      <h4>Random Recipe from Each Category</h4>
       <div>
         {categories.map((category) => (
           <div key={category} style={{ marginBottom: "20px" }}>

@@ -12,24 +12,29 @@ import EditRecipe from "./components/EditRecipe";
 import IngredientList from "./components/IngredientList";
 import PizzaWerbung from "./components/PizzaWerbung";
 import HeaderBar from "./components/HeaderBar";
+import UeberUns from "./components/UeberUns";
+import "./App.css";
 
 const App: React.FC = () => {
   return (
     <Router>
       <div>
         <HeaderBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/recipes" element={<Recipes />} />
-          <Route path="/add-recipe" element={<AddRecipe />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/recipe-details/:id" element={<RecipeDetails />} />
-          <Route path="/impressum" element={<Impressum />} />
-          <Route path="/data-safety" element={<DataSafetyInformation />} />
-          <Route path="/pizza-ist-toll" element={<PizzaWerbung />} />
-          <Route path="/edit-recipe/:id" element={<EditRecipe />} />
-          <Route path="/ingredients" element={<IngredientList />} />
-        </Routes>
+        <div className="container-fullscreen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/recipes" element={<Recipes />} />
+            <Route path="/add-recipe" element={<AddRecipe />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/recipe-details/:id" element={<RecipeDetails />} />
+            <Route path="/impressum" element={<Impressum />} />
+            <Route path="/data-safety" element={<DataSafetyInformation />} />
+            <Route path="/pizza-ist-toll" element={<PizzaWerbung />} />
+            <Route path="/edit-recipe/:id" element={<EditRecipe />} />
+            <Route path="/ingredients" element={<IngredientList />} />
+            <Route path="/ueber-uns" element={<UeberUns />} />
+          </Routes>
+        </div>
         <FooterBar /> {/* Ensure the FooterBar is outside the Routes */}
       </div>
     </Router>

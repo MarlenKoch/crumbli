@@ -2,7 +2,7 @@ import React from "react";
 
 const Impressum: React.FC = () => {
   return (
-    <div>
+    <div className="container-scrollable">
       <h2>Warum Pizza toll ist</h2>
       <p>
         Pizza ist zweifellos eines der köstlichsten und beliebtesten Gerichte
