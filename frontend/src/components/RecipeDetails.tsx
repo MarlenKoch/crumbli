@@ -76,7 +76,7 @@ const RecipeDetails: React.FC = () => {
   const imageSrc = `http://localhost:3000${recipe.image}`;
 
   return (
-    <div>
+    <div className="container-scrollable">
       <h2>{recipe.name}</h2>
       <img
         src={imageSrc}

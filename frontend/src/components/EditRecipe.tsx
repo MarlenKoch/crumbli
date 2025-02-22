@@ -29,12 +29,17 @@ const EditRecipe: React.FC = () => {
     category: false,
     favorite: false,
   });
+  const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(
+    null
+  );
+  const [isEditingIngredient, setIsEditingIngredient] = useState(false);
   const [isAddingIngredient, setIsAddingIngredient] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
     name: "",
     amount: "",
     unit: "",
   });
+
   // const [originalRecipe, setOriginalRecipe] = useState<RecipeDetail | null>(
   //   null
   // );
@@ -73,6 +78,42 @@ const EditRecipe: React.FC = () => {
           console.error(err);
           alert("Error deleting ingredient.");
         });
+    }
+  };
+
+  const handleIngredientClick = (ingredient: Ingredient) => {
+    setEditingIngredient(ingredient);
+    setIsEditingIngredient(true);
+  };
+
+  const handleIngredientUpdate = async () => {
+    if (!editingIngredient || !recipe) return;
+
+    try {
+      await axios.put(
+        `http://localhost:3000/api/recipes/${id}/ingredients/${editingIngredient.id}`,
+        {
+          amount: editingIngredient.amount,
+          unit: editingIngredient.unit,
+        }
+      );
+
+      setRecipe((prevRecipe) => {
+        if (!prevRecipe) return prevRecipe;
+        return {
+          ...prevRecipe,
+          ingredients: prevRecipe.ingredients.map((ing) =>
+            ing.id === editingIngredient.id ? editingIngredient : ing
+          ),
+        };
+      });
+
+      setEditingIngredient(null);
+      setIsEditingIngredient(false);
+      alert("Ingredient updated successfully.");
+    } catch (error) {
+      console.error("Error updating ingredient: ", error);
+      alert("Error updating ingredient.");
     }
   };
 
@@ -353,10 +394,57 @@ const EditRecipe: React.FC = () => {
         <h3>Ingredients:</h3>
         <ul>
           {recipe.ingredients.map((ingredient) => (
-            <li key={ingredient.id}>
-              {ingredient.amount} {ingredient.unit} {ingredient.name}{" "}
+            <li
+              key={ingredient.id}
+              onClick={() => handleIngredientClick(ingredient)}
+            >
+              {isEditingIngredient &&
+              editingIngredient?.id === ingredient.id ? (
+                <div>
+                  <input
+                    type="text"
+                    value={editingIngredient.amount}
+                    onChange={(e) =>
+                      setEditingIngredient({
+                        ...editingIngredient,
+                        amount: e.target.value,
+                      })
+                    }
+                  />
+                  <select
+                    value={editingIngredient.unit}
+                    onChange={(e) =>
+                      setEditingIngredient({
+                        ...editingIngredient,
+                        unit: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="TL">TL</option>
+                    <option value="EL">EL</option>
+                    <option value="Pck">Pck</option>
+                    <option value="Tasse">Tasse</option>
+                    <option value="g">g</option>
+                    <option value="Kg">Kg</option>
+                    <option value="l">l</option>
+                    <option value="Blt">Blt</option>
+                    <option value="ml">ml</option>
+                    <option value="Prise">Prise</option>
+                    <option value="Tropfen">Tropfen</option>
+                    <option value=" ">-</option>
+                  </select>
+                  <button onClick={handleIngredientUpdate}>Update</button>
+                  <button onClick={() => setIsEditingIngredient(false)}>
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <span>
+                  {ingredient.amount} {ingredient.unit} {ingredient.name}
+                </span>
+              )}
               <button onClick={() => handleIngredientDelete(ingredient.id)}>
-                Delete
+                <img src="/deleteIcon.png" width={40}></img>
               </button>
             </li>
           ))}
