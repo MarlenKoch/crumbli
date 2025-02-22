@@ -20,7 +20,7 @@ const App: React.FC = () => {
     <Router>
       <div>
         <HeaderBar />
-        <div className="container-fullscreen">
+        <div>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/recipes" element={<Recipes />} />
@@ -35,7 +35,7 @@ const App: React.FC = () => {
             <Route path="/ueber-uns" element={<UeberUns />} />
           </Routes>
         </div>
-        <FooterBar /> {/* Ensure the FooterBar is outside the Routes */}
+        <FooterBar />
       </div>
     </Router>
   );

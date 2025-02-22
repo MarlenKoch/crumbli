@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import RecipeSearchBar from "./RecipeSearchBar";
 import RandomRecipes from "./RandomRecipes";
 import "../App.css";
+import "./Home.css"
 
 const Home: React.FC = () => {
   return (
-    <div className="container-vertical">
+    <div >
       <div className="container-fullscreen">
         <p className="big-header">CRÜMBLI</p>
         <RecipeSearchBar />
