@@ -1,41 +1,39 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import RecipeList from "./components/ReceipeList";
-import AddRecipe from "./components/AddReceipe";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import Recipes from "./components/Recipes";
+import AddRecipe from "./components/AddRecipe";
+import Favorites from "./components/Favorites";
+import RecipeDetails from "./components/RecipeDetails";
+import Impressum from "./components/Impressum";
+import DataSafetyInformation from "./components/DataSafetyInformation";
+import FooterBar from "./components/FooterBar";
+import EditRecipe from "./components/EditRecipe";
+import IngredientList from "./components/IngredientList";
+import PizzaWerbung from "./components/PizzaWerbung";
+import HeaderBar from "./components/HeaderBar";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+const App: React.FC = () => {
   return (
-    <>
+    <Router>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <HeaderBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/add-recipe" element={<AddRecipe />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/recipe-details/:id" element={<RecipeDetails />} />
+          <Route path="/impressum" element={<Impressum />} />
+          <Route path="/data-safety" element={<DataSafetyInformation />} />
+          <Route path="/pizza-ist-toll" element={<PizzaWerbung />} />
+          <Route path="/edit-recipe/:id" element={<EditRecipe />} />
+          <Route path="/ingredients" element={<IngredientList />} />
+        </Routes>
+        <FooterBar /> {/* Ensure the FooterBar is outside the Routes */}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <div>
-        <RecipeList></RecipeList>
-        <AddRecipe></AddRecipe>
-      </div>
-    </>
+    </Router>
   );
-}
+};
 
 export default App;

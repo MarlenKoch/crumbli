@@ -8,5 +8,7 @@ export interface Recipe {
   name: string;
   picture?: string;
   instruction: string;
+  favorite: boolean;
+  category: string;
   ingredients: Ingredient[];
 }
