@@ -180,7 +180,7 @@ body {
   bottom: 0;
   width: 100%;
   z-index: 1000; /* Ensures the footer is above other content */
-  background-color: var(--brown1);
+  background-color: var(--brown2);
 }
 
 .footer-links {
@@ -221,91 +221,6 @@ button {
 }
 button:hover {
   transform: scale(1.05);
-  background-color: var(--brown3);
-}
-
-/* Search Bar Container */
-.search-bar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Search Container to group input and results */
-.search-container {
-  position: relative;
-  margin: 10px;
-  width: 100%; /* Set desired width */
-  max-width: 400px;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Input Field */
-.search-input {
-  margin: 0;
-  width: 100%;
-  max-width: 400px;
-  padding: 10px;
-  border: 2px solid var(--green1);
-  /* Remove border to connect visually with results */
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-radius: 5px;
-  outline: none;
-  font-size: 16px;
-  transition: border-color 0.3s;
-  z-index: 1;
-  color: var(--green1);
-}
-
-/* Focus state for Input Field */
-.search-input:focus {
-  border-color: var(--brown2);
-  color: var(--brown2);
-}
-
-.search-input.has-results {
-  border-color: var(--brown2);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: none;
-  color: var(--brown2);
-}
-
-/* Search Results List */
-.search-results {
-  list-style-type: none; /* Removes bullet points */
-  margin: 0; /* Remove default margin */
-  padding: 10px;
-  width: 100%;
-  max-width: 400px;
-  background-color: var(--brown2);
-  border: 2px solid var(--brown2);
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  max-height: 200px;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 2;
-}
-
-/* Individual Search Result Item */
-.search-results li {
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  border-radius: 5px;
-}
-
-/* Hover effect for Search Result Item */
-.search-results li:hover {
   background-color: var(--brown3);
 }
 
@@ -409,4 +324,13 @@ button:hover {
 
 ul {
   list-style-type: none;
+}
+
+.header-bar {
+  margin: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #e4cdaf;
+  box-shadow: 0 2px 25px -2px var(--brown2);
 }

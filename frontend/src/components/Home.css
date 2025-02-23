@@ -14,3 +14,25 @@
   background-color: var(--brown1);
   overflow: hidden; /* Prevent scrolling */
 }
+
+.column {
+  float: left;
+}
+
+.column-left {
+  width: 400px;
+}
+
+.column-right {
+  width: calc (100vw-400px);
+}
+
+.topnav {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+}
+
+img {
+  height: 200px;
+}

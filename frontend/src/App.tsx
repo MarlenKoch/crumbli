@@ -20,7 +20,7 @@ const App: React.FC = () => {
     <Router>
       <div>
         <HeaderBar />
-        <div>
+        <div className="container-fullscreen">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/recipes" element={<Recipes />} />

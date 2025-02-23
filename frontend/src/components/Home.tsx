@@ -8,30 +8,32 @@ import "./Home.css"
 
 const Home: React.FC = () => {
   return (
-    <div >
-      <div className="container-fullscreen">
+    <div className="">
+      <div className="topnav">
         <p className="big-header">CRÜMBLI</p>
         <RecipeSearchBar />
       </div>
-      <div className="container">
-        <RandomRecipes />
-        <div className="container-vertical">
-          <div className="container-vertical">
+      <div className="topnav">
+        <div className="column-left">
+          <RandomRecipes />
+        </div>
+        <div className="column-right">
+          <div >
             <p>diese App ist toll</p>
             <img src="cake.png"></img>
           </div>
-          <div className="container">
+          <div >
             <Link to="/recipes">
-              <button className="squareButton">View All Recipes</button>
+              <button >View All Recipes</button>
             </Link>
             <Link to="/add-recipe">
-              <button className="squareButton">Add Recipe</button>
+              <button >Add Recipe</button>
             </Link>
             <Link to="/favorites">
-              <button className="squareButton">View Favorites</button>
+              <button >View Favorites</button>
             </Link>
             <Link to="/ingredients">
-              <button className="squareButton">All Ingredients</button>
+              <button >All Ingredients</button>
             </Link>
           </div>
         </div>

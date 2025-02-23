@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 
 const HeaderBar: React.FC = () => {
   return (
-    <header>
-      <Link to="/add-recipe">
-        <button>+</button>
-      </Link>
-      <Link to="/" style={{ margin: "0 10px" }}>
+    <header className="header-bar">
+      <Link to="/">
         <button>|^|</button>
+      </Link>
+      <Link to="/add-recipe">
+        <button>Add another Recipe</button>
       </Link>
     </header>
   );

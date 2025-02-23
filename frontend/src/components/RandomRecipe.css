@@ -1,0 +1,30 @@
+.img-a {
+  width: 350px;
+  height: 170px;
+  object-fit: cover;
+  margin-bottom: 0px;
+}
+
+.text-a {
+  margin: 7px;
+  color: var(--green2);
+  font-weight: bold;
+  font-size: 24px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+.polaroid {
+  cursor: pointer;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  background-color: rgb(255, 255, 255);
+  margin-bottom: 30px;
+  width: 400px;
+}
+
+.refresh-button {
+  margin: 0px;
+  cursor: pointer;
+  width: 100%;
+  background-color: var(--green2);
+}
