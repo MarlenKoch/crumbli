@@ -18,19 +18,20 @@ const Home: React.FC = () => {
           <RandomRecipes />
         </div>
         <div className="column-right">
-
-          <Link to="/recipes">
-            <button className="link-button-1">Alle Rezepte</button>
-          </Link>
-          <Link to="/add-recipe">
-            <button className="link-button-2">Rezept hinzufügen</button>
-          </Link>
-          <Link to="/favorites">
-            <button className="link-button-3">Meine Favoriten</button>
-          </Link>
-          <Link to="/ingredients">
-            <button className="link-button-4">Alle Zutaten</button>
-          </Link>
+          <div>
+            <Link to="/recipes">
+              <button className="link-button-1">Alle Rezepte</button>
+            </Link>
+            <Link to="/add-recipe">
+              <button className="link-button-2">Rezept hinzufügen</button>
+            </Link>
+            <Link to="/favorites">
+              <button className="link-button-3">Meine Favoriten</button>
+            </Link>
+            <Link to="/ingredients">
+              <button className="link-button-4">Alle Zutaten</button>
+            </Link>
+          </div>
         </div>
       </div>
 
