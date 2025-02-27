@@ -1,6 +1,7 @@
 .img-a {
-  width: 350px;
+  width: calc(26.5vw - 50px);
   height: 170px;
+  height: calc((100vh - 435px) / 2 - 40px);
   object-fit: cover;
   margin-bottom: 0px;
 }
@@ -17,10 +18,11 @@
   cursor: pointer;
   padding-top: 20px;
   padding-bottom: 10px;
-  height: 210px;
+  /* height: 210px; */
+  height: calc((100vh - 435px) / 2);
   background-color: rgb(255, 255, 255);
   margin-bottom: 30px;
-  width: 400px;
+  width: calc(26.5vw);
   transition: 0.25s;
 }
 
