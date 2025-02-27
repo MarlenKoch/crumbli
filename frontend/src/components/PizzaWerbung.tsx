@@ -1,5 +1,5 @@
 import React from "react";
-import './PizzaWerbung.css';
+import './FooterPages.css';
 
 const Impressum: React.FC = () => {
   return (
