@@ -1,6 +1,7 @@
 import React from "react";
 import './FooterPages.css';
 
+
 const Impressum: React.FC = () => {
   return (
     <div className="scrollable-text-box">
