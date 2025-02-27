@@ -32,7 +32,7 @@ const App: React.FC = () => {
             <Route path="/pizza-ist-toll" element={<PizzaWerbung />} />
             <Route path="/edit-recipe/:id" element={<EditRecipe />} />
             <Route path="/ingredients" element={<IngredientList />} />
-            <Route path="/ueber-uns" element={<UeberUns />} />
+            <Route path="/ueber-crumbli" element={<UeberUns />} />
           </Routes>
         </div>
         <FooterBar />

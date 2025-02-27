@@ -1,12 +1,15 @@
 import React from "react";
+import './FooterPages.css';
+
 
 const Impressum: React.FC = () => {
   return (
-    <div className="container-scrollable">
+    <div className="scrollable-text-box">
       <h2>Warum Pizza toll ist</h2>
-      <p>
-        Pizza ist zweifellos eines der köstlichsten und beliebtesten Gerichte
-        weltweit. Ihre Vielseitigkeit ist ein wesentlicher Bestandteil dessen,
+
+      <p>Pizza ist zweifellos eines der köstlichsten und beliebtesten Gerichte
+        weltweit. </p>
+      <p> Ihre Vielseitigkeit ist ein wesentlicher Bestandteil dessen,
         was sie so besonders macht. Der knusprige Boden, der in der Textur
         leicht variiert, je nachdem, ob er dünn und knusprig oder dick und
         fluffig ist, bildet die Basis für ein kulinarisches Meisterwerk. Die
@@ -20,41 +23,42 @@ const Impressum: React.FC = () => {
         scharfer Salami – es gibt für jeden Geschmack die passende Pizza. Die
         Mischung aus warmem, geschmolzenem Käse und gut gewürzten Soßen ist ein
         wahrer Gaumenschmaus und sorgt jedes Mal für ein einzigartiges
-        Geschmackserlebnis. Eine weitere fantastische Eigenschaft von Pizza ist
-        ihre gesellige Natur. Sie ist das perfekte Essen, um mit Freunden oder
-        der Familie geteilt zu werden. Egal, ob bei einer gemütlichen
-        Geburtstagsfeier, einem spontanen Treffen mit Freunden oder einem
-        entspannten Filmabend – Pizza ist stets eine beliebte Wahl und bringt
-        Menschen zusammen. Ihre Einfachheit in der Zubereitung und die
-        Möglichkeit, für jeden die passende Geschmacksrichtung zu finden, machen
-        sie zu einem allzeit beliebten Gericht. Pizza hat über die Jahre auch
-        eine kulturelle Bedeutung erlangt. Besonders in Italien, ihrem
-        Ursprungsland, ist Pizza mehr als nur ein Gericht – sie ist ein Symbol
-        für die italienische Lebensart, geprägt von Gemeinschaft und Genuss.
-        Doch auch international hat sich Pizza einen festen Platz in den Herzen
-        der Menschen erobert und ist in unzähligen Ländern zu einem festen
-        Bestandteil der Esskultur geworden. In den USA hat sich mit der
-        Einführung der Chicago-Style-Deep-Dish- und der New-York-Style-Pizza
-        eine eigenständige Pizza-Kultur entwickelt, die das Erlebnis rund um den
-        Genuss von Pizza noch variantenreicher macht. Nicht nur geschmacklich,
-        sondern auch wirtschaftlich hat Pizza eine beeindruckende
-        Erfolgsgeschichte geschrieben. Die riesige Vielfalt an Pizzerien und der
-        beliebte Lieferservice haben dazu beigetragen, dass Pizza jederzeit und
-        nahezu überall verfügbar ist. Diese Bequemlichkeit und Erreichbarkeit
-        machen es einfach, spontanen Hunger zu stillen und schnell ein
-        zufriedenstellendes Gericht zu erhalten. Auch in Supermärkten gibt es
-        eine große Auswahl an Tiefkühlpizzen, die es ermöglichen, dieses leckere
-        Gericht jederzeit zu Hause zuzubereiten. Zusammenfassend lässt sich
-        sagen, dass Pizza durch ihre Vielseitigkeit, ihren unvergleichlichen
-        Geschmack, ihre gesellige Natur und ihre kulturelle Bedeutung ein
-        außergewöhnliches und dennoch alltägliches Gericht ist. Sie vereint
-        verschiedene Geschmäcker und Kulturen auf einzigartige Weise und sorgt
-        so immer wieder für kulinarische Freude. Egal, ob man sie klassisch im
-        Restaurant, daheim aus dem Ofen oder in geselliger Runde genießt – Pizza
-        bleibt einfach eine außergewöhnliche Gaumenfreude, die Generationen und
-        Kulturen gleichermaßen begeistert und verbindet.
-      </p>
+        Geschmackserlebnis.</p> <p> Eine weitere fantastische Eigenschaft von Pizza ist
+          ihre gesellige Natur. Sie ist das perfekte Essen, um mit Freunden oder
+          der Familie geteilt zu werden. Egal, ob bei einer gemütlichen
+          Geburtstagsfeier, einem spontanen Treffen mit Freunden oder einem
+          entspannten Filmabend – Pizza ist stets eine beliebte Wahl und bringt
+          Menschen zusammen. Ihre Einfachheit in der Zubereitung und die
+          Möglichkeit, für jeden die passende Geschmacksrichtung zu finden, machen
+          sie zu einem allzeit beliebten Gericht.</p> <p> Pizza hat über die Jahre auch
+            eine kulturelle Bedeutung erlangt. Besonders in Italien, ihrem
+            Ursprungsland, ist Pizza mehr als nur ein Gericht – sie ist ein Symbol
+            für die italienische Lebensart, geprägt von Gemeinschaft und Genuss.
+            Doch auch international hat sich Pizza einen festen Platz in den Herzen
+            der Menschen erobert und ist in unzähligen Ländern zu einem festen
+            Bestandteil der Esskultur geworden. In den USA hat sich mit der
+            Einführung der Chicago-Style-Deep-Dish- und der New-York-Style-Pizza
+            eine eigenständige Pizza-Kultur entwickelt, die das Erlebnis rund um den
+            Genuss von Pizza noch variantenreicher macht. </p> <p>Nicht nur geschmacklich,
+              sondern auch wirtschaftlich hat Pizza eine beeindruckende
+              Erfolgsgeschichte geschrieben. Die riesige Vielfalt an Pizzerien und der
+              beliebte Lieferservice haben dazu beigetragen, dass Pizza jederzeit und
+              nahezu überall verfügbar ist. Diese Bequemlichkeit und Erreichbarkeit
+              machen es einfach, spontanen Hunger zu stillen und schnell ein
+              zufriedenstellendes Gericht zu erhalten. Auch in Supermärkten gibt es
+              eine große Auswahl an Tiefkühlpizzen, die es ermöglichen, dieses leckere
+              Gericht jederzeit zu Hause zuzubereiten. </p> <p>Zusammenfassend lässt sich
+                sagen, dass Pizza durch ihre Vielseitigkeit, ihren unvergleichlichen
+                Geschmack, ihre gesellige Natur und ihre kulturelle Bedeutung ein
+                außergewöhnliches und dennoch alltägliches Gericht ist. Sie vereint
+                verschiedene Geschmäcker und Kulturen auf einzigartige Weise und sorgt
+                so immer wieder für kulinarische Freude. Egal, ob man sie klassisch im
+                Restaurant, daheim aus dem Ofen oder in geselliger Runde genießt – Pizza
+                bleibt einfach eine außergewöhnliche Gaumenfreude, die Generationen und
+                Kulturen gleichermaßen begeistert und verbindet.</p>
+
       <div>
+        <br />
         <h3>Albert Einstein</h3>
         <p>
           „Die Relativitätstheorie mag komplex sein, aber die einfache Freude an

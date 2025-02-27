@@ -12,7 +12,7 @@ interface Ingredient {
 interface RecipeDetail {
   id: number;
   name: string;
-  image: string; // Should store the relative path, like "/uploads/{filename}"
+  image: string;
   instructions: string;
   favorite: boolean;
   category: string;
@@ -84,15 +84,15 @@ const RecipeDetails: React.FC = () => {
         style={{ width: "300px", height: "200px", objectFit: "cover" }}
       />
       <p>
-        <strong>Instructions:</strong> {recipe.instructions}
+        <strong>Anleitung:</strong> {recipe.instructions}
       </p>
       <p>
-        <strong>Category:</strong> {recipe.category}
+        <strong>Kategorie:</strong> {recipe.category}
       </p>
       <p>
-        <strong>Favorite:</strong> {recipe.favorite ? "Yes" : "No"}
+        <strong>Favorit?:</strong> {recipe.favorite ? "Yes" : "No"}
       </p>
-      <h3>Ingredients:</h3>
+      <h3>Zutaten:</h3>
       <ul>
         {recipe.ingredients.map((ingredient) => (
           <li key={ingredient.id}>
@@ -100,9 +100,9 @@ const RecipeDetails: React.FC = () => {
           </li>
         ))}
       </ul>
-      <button onClick={handleEdit}>Edit Recipe</button>
-      <button onClick={handleDelete}>Delete Recipe</button>
-      <button onClick={handleBack}>Back</button>
+      <button onClick={handleEdit}>Rezept bearbeiten</button>
+      <button onClick={handleDelete}>Rezept löschen</button>
+      <button onClick={handleBack}>zurück</button>
     </div>
   );
 };

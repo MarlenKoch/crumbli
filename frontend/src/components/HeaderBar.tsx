@@ -9,7 +9,7 @@ const HeaderBar: React.FC = () => {
         <img src="cookie.svg" className="cookie-button"></img>
       </Link>
       <Link to="/add-recipe">
-        <button className="add-recipe-button">Add another Recipe</button>
+        <button className="add-recipe-button">Neues Rezept hinzufügen</button>
       </Link>
     </header>
   );
