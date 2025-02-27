@@ -180,7 +180,8 @@ body {
   bottom: 0;
   width: 100%;
   z-index: 1000; /* Ensures the footer is above other content */
-  background-color: var(--brown2);
+  background-color: var(--brown3);
+  box-shadow: 0 2px 15px -2px var(--brown2);
 }
 
 .footer-links {
@@ -215,13 +216,13 @@ button {
   font-family: inherit;
   background-color: var(--brown2);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: 0.25s;
   margin: 20px;
   color: var(--white);
 }
+
 button:hover {
   transform: scale(1.05);
-  background-color: var(--brown3);
 }
 
 .text-with-bg {

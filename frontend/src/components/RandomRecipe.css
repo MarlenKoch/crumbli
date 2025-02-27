@@ -17,14 +17,24 @@
   cursor: pointer;
   padding-top: 20px;
   padding-bottom: 10px;
+  height: 210px;
   background-color: rgb(255, 255, 255);
   margin-bottom: 30px;
   width: 400px;
+  transition: 0.25s;
+}
+
+.polaroid:hover {
+  box-shadow: 0 2px 15px -2px var(--brown2);
 }
 
 .refresh-button {
   margin: 0px;
   cursor: pointer;
   width: 100%;
+  background-color: var(--green1);
+}
+
+.refresh-button:hover {
   background-color: var(--green2);
 }
