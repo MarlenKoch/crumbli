@@ -61,13 +61,17 @@ const RandomRecipes: React.FC = () => {
       textElements.forEach((textElement) => {
         const element = textElement as HTMLElement;
         const textLength = element.textContent?.length || 0;
-        const newFontSize = Math.min(24, (380 / textLength) * 2);
+
+        const containerWidth = window.innerWidth;
+        const newFontSize = Math.min(
+          24,
+          ((containerWidth * 0.265) / textLength) * 2
+        );
         element.style.fontSize = newFontSize + "px";
       });
     };
 
     adjustFontSize();
-
   }, [categories, recipes]);
 
   return (
@@ -98,7 +102,8 @@ const RandomRecipes: React.FC = () => {
         ))}
       </div>
       <button onClick={handleRefresh} className="refresh-button">
-        Neue zufällige Rezepte      </button>
+        Neue zufällige Rezepte{" "}
+      </button>
     </div>
   );
 };
