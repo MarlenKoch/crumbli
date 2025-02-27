@@ -2,7 +2,7 @@ import React from "react";
 
 const Impressum: React.FC = () => {
   return (
-    <div>
+    <div className="non-scrollable-text-box">
       <h1>Impressum</h1>
       <div style={{ fontWeight: "bold" }}>
         <p>Willkommen auf Crümbli, Ihrem neuen digitalen Kochbuch!
