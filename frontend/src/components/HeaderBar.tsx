@@ -1,14 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./HeaderBar.css";
 
 const HeaderBar: React.FC = () => {
   return (
     <header className="header-bar">
       <Link to="/">
-        <button>|^|</button>
+        <img src="cookie.svg" className="cookie-button"></img>
       </Link>
       <Link to="/add-recipe">
-        <button>Add another Recipe</button>
+        <button className="add-recipe-button">Add another Recipe</button>
       </Link>
     </header>
   );

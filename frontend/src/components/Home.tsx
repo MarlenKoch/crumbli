@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import RecipeSearchBar from "./RecipeSearchBar";
 import RandomRecipes from "./RandomRecipes";
 import "../App.css";
-import "./Home.css"
+import "./Home.css";
 
 const Home: React.FC = () => {
   return (
@@ -18,24 +18,18 @@ const Home: React.FC = () => {
           <RandomRecipes />
         </div>
         <div className="column-right">
-          <div >
-            <p>diese App ist toll</p>
-            <img src="cake.png"></img>
-          </div>
-          <div >
-            <Link to="/recipes">
-              <button >View All Recipes</button>
-            </Link>
-            <Link to="/add-recipe">
-              <button >Add Recipe</button>
-            </Link>
-            <Link to="/favorites">
-              <button >View Favorites</button>
-            </Link>
-            <Link to="/ingredients">
-              <button >All Ingredients</button>
-            </Link>
-          </div>
+          <Link to="/recipes">
+            <button className="link-button-1">View All Recipes</button>
+          </Link>
+          <Link to="/add-recipe">
+            <button className="link-button-2">Add Recipe</button>
+          </Link>
+          <Link to="/favorites">
+            <button className="link-button-3">View Favorites</button>
+          </Link>
+          <Link to="/ingredients">
+            <button className="link-button-4">All Ingredients</button>
+          </Link>
         </div>
       </div>
 

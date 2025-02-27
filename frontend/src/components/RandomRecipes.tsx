@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./RandomRecipe.css"
+import "./RandomRecipe.css";
 
 interface Recipe {
   id: number;
@@ -55,6 +55,22 @@ const RandomRecipes: React.FC = () => {
     navigate(`/recipe-details/${id}?from=random`);
   };
 
+  useEffect(() => {
+    const adjustFontSize = () => {
+      const textElements = document.querySelectorAll(".text-a");
+      textElements.forEach((textElement) => {
+        const element = textElement as HTMLElement;
+        const textLength = element.textContent?.length || 0;
+        const newFontSize = Math.min(24, (380 / textLength) * 2);
+        element.style.fontSize = newFontSize + "px";
+      });
+    };
+
+    adjustFontSize();
+
+    // In case categories or recipes change and font size needs re-calculation
+  }, [categories, recipes]);
+
   return (
     <div>
       <div>
@@ -65,7 +81,6 @@ const RandomRecipes: React.FC = () => {
                 onClick={() => handleRecipeClick(recipes[category]!.id)}
                 className="polaroid"
               >
-
                 {recipes[category]!.image && (
                   <img
                     src={`http://localhost:3000${recipes[category]!.image}`} // Construct full image URL
@@ -73,7 +88,9 @@ const RandomRecipes: React.FC = () => {
                     className="img-a"
                   />
                 )}
-                <p className="text-a">heute {category}: {recipes[category]!.name}</p>
+                <p className="text-a">
+                  heute {category}: {recipes[category]!.name}
+                </p>
               </div>
             ) : (
               <p>No recipes available in this category.</p>
@@ -81,10 +98,7 @@ const RandomRecipes: React.FC = () => {
           </div>
         ))}
       </div>
-      <button
-        onClick={handleRefresh}
-        className="refresh-button"
-      >
+      <button onClick={handleRefresh} className="refresh-button">
         Refresh
       </button>
     </div>

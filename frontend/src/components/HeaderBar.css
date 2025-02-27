@@ -1,0 +1,18 @@
+.header-bar {
+  margin: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--brown3);
+  box-shadow: 0 2px 15px -2px var(--brown2);
+}
+
+.cookie-button {
+  height: 70px;
+  margin: 5px;
+  margin-left: 20px;
+}
+
+.add-recipe-button {
+  background-color: var(--brown2);
+}
