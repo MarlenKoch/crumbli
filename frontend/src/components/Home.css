@@ -24,17 +24,17 @@
 }
 
 .column-left {
-  width: 400px;
+  width: 26.5%;
 }
 
 .column-right {
-  width: calc(100vw - 400px);
+  width: 73.5%;
   margin-top: 0;
   padding-top: 0;
-  display: flex; /* Use flexbox */
-  flex-direction: column; /* Align children in a column */
-  align-items: flex-start; /* Align children to the start of the column (left) */
-  justify-content: flex-start; /* Align children to the top of the container */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .topnav {
@@ -57,16 +57,25 @@
 .link-button-3,
 .link-button-4 {
   background-color: #5d7951;
-  height: 580px;
-  width: 225px;
-  background-size: 430px, cover;
+  /* height: 580px; */
+  height: calc(100vh - 278px);
+  width: calc(73.5vw / 4 - 52px);
+  background-size: calc(73.5vw / 4 - 52px + 200px) calc(100vh - 278px + 100px),
+    cover;
   background-position: center, center;
   box-shadow: 0 2px 15px -2px var(--brown2);
   color: #5b3a29;
-  font-size: 20px;
+  font-size: calc(1vw);
   font-weight: bold;
   margin: 20px;
   margin-top: 0;
+}
+
+.link-button-1:hover,
+.link-button-2:hover,
+.link-button-3:hover,
+.link-button-4:hover {
+  transform: scale(1.03);
 }
 
 .link-button-1 {
