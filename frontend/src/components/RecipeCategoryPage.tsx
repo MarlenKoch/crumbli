@@ -48,7 +48,7 @@ const RecipeCategoryPage: React.FC = () => {
 
   return (
     <div>
-      <h2>Recipe Categories</h2>
+      <h2>Rezept-Kategorien</h2>
       <div style={{ marginBottom: "20px" }}>
         {categories.map((category) => (
           <button
@@ -67,10 +67,10 @@ const RecipeCategoryPage: React.FC = () => {
         ))}
       </div>
       <div>
-        <h3>Random Recipes in {selectedCategory}</h3>
+        <h3>Zufällige Rezepte in {selectedCategory}</h3>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {recipes.map((recipe) => {
-            const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
+            const imageUrl = `http://localhost:3000${recipe.image}`;
             return (
               <div
                 key={recipe.id}
