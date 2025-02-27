@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import "./IngredientList.css"
 
 // Define the TypeScript interface for an ingredient
 interface Ingredient {
@@ -15,7 +15,6 @@ const IngredientList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   // State to manage error messages
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate(); // Use navigate instead of history
 
   useEffect(() => {
     // Fetch all ingredients from the API
@@ -47,13 +46,12 @@ const IngredientList: React.FC = () => {
   // Render the list of ingredients
   return (
     <div>
-      <h2>Ingredient List</h2>
-      <ul className="container-scrollable">
+      <h1 className="liste-titel">Alle deine Zutaten:</h1>
+      <ul className="ingredient-box">
         {ingredients.map((ingredient) => (
           <li key={ingredient.id}>{ingredient.name}</li>
         ))}
       </ul>
-      <button onClick={() => navigate(`/`)}>Back</button>
     </div>
   );
 };
