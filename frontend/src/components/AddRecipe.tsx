@@ -19,6 +19,7 @@ const AddRecipe: React.FC = () => {
   const navigate = useNavigate(); // Use navigate instead of history
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePath, setImagePath] = useState<string>("");
+  const characterLimit = 77;
 
   const handleAddIngredient = () => {
     setIngredients([...ingredients, { name: "", amount: "", unit: "" }]);
@@ -82,33 +83,6 @@ const AddRecipe: React.FC = () => {
     }
   };
 
-  // const handleAddRecipe = () => {
-  //   if (!name || !instructions) {
-  //     return alert("Name and instructions are required!");
-  //   }
-
-  //   axios
-  //     .post("http://localhost:3000/api/recipes", {
-  //       name,
-  //       image,
-  //       instructions,
-  //       favorite,
-  //       category,
-  //       ingredients: ingredients.map((ingredient) => ({
-  //         ingredient_id: ingredient.id,
-  //         amount: ingredient.amount,
-  //         unit: ingredient.unit,
-  //       })),
-  //     })
-  //     .then(() => {
-  //       alert("Recipe added successfully!");
-  //       navigate(`/`);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       alert("Error adding recipe.");
-  //     });
-  // };
   const handleAddRecipe = () => {
     if (!name || !instructions) {
       return alert("Name and instructions are required!");
@@ -167,6 +141,13 @@ const AddRecipe: React.FC = () => {
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= characterLimit) {
+      setName(value);
+    }
+  };
+
   return (
     <div className="add-recipe-container">
       <h2>Add Recipe</h2>
@@ -175,7 +156,8 @@ const AddRecipe: React.FC = () => {
           type="text"
           placeholder="Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={handleChange}
+          // onChange={(e) => setName(e.target.value)}
           className="input-field"
         />
       </div>
@@ -271,6 +253,6 @@ const AddRecipe: React.FC = () => {
       </button>
     </div>
   );
-}
+};
 
 export default AddRecipe;

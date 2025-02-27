@@ -53,18 +53,6 @@ const Recipes: React.FC = () => {
               <div className="text-with-bg">
                 <h3>{recipe.name}</h3>
               </div>
-
-              {/* {recipe.image && (
-                <img
-                  src={imageUrl}
-                  alt={recipe.name}
-                  style={{
-                    width: "150px",
-                    height: "100px",
-                    objectFit: "cover",
-                  }}
-                />
-              )} */}
             </div>
           );
         })}
