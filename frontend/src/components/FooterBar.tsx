@@ -14,8 +14,8 @@ const FooterBar: React.FC = () => {
         <Link to="/pizza-ist-toll" className="white-link">
           Warum Pizza toll ist
         </Link>
-        <Link to="/ueber-uns" className="white-link">
-          Über uns
+        <Link to="/ueber-crumbli" className="white-link">
+          Über Crümbli
         </Link>
       </ul>
     </footer>

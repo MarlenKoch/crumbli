@@ -65,7 +65,7 @@ const Recipes: React.FC = () => {
           );
         })}
       </div>
-      <button onClick={() => navigate(`/`)}>Back</button>
+      <button onClick={() => navigate(`/`)}>Zurück</button>
     </div>
   );
 };
