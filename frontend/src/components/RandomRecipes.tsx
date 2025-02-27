@@ -72,8 +72,7 @@ const RandomRecipes: React.FC = () => {
 
   }, [categories, recipes]);
 
-  // Ensure that the image path is prefixed with the correct base URL
-  const imageSrc = recipes.image ? `http://localhost:3000${recipes[category]!.image}` : alienImage;
+
 
   return (
     <div>
