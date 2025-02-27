@@ -40,9 +40,8 @@ const EditRecipe: React.FC = () => {
     unit: "",
   });
 
-  // const [originalRecipe, setOriginalRecipe] = useState<RecipeDetail | null>(
-  //   null
-  // );
+  const characterLimit = 77;
+
   const [imageFile, setImageFile] = useState<File | null>(null);
   const navigate = useNavigate();
 
@@ -287,12 +286,18 @@ const EditRecipe: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= characterLimit) {
+      handleDetailEdit("name", value);
+    }
+  };
+
   const imageSrc = `http://localhost:3000${recipe.image}`;
 
   return (
     <div className="container-scrollable">
       <h2>Editing: {recipe.name}</h2>
-
       <div>
         <label>
           Name:
@@ -300,7 +305,7 @@ const EditRecipe: React.FC = () => {
             <input
               type="text"
               value={recipe.name}
-              onChange={(e) => handleDetailEdit("name", e.target.value)}
+              onChange={handleChange}
               onBlur={() => toggleEdit("name")}
             />
           ) : (

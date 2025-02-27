@@ -13,23 +13,25 @@ const Home: React.FC = () => {
         <p className="big-header">CRÜMBLI</p>
         <RecipeSearchBar />
       </div>
-      <div className="topnav">
+      <div className="home-page">
         <div className="column-left">
           <RandomRecipes />
         </div>
         <div className="column-right">
-          <Link to="/recipes">
-            <button className="link-button-1">View All Recipes</button>
-          </Link>
-          <Link to="/add-recipe">
-            <button className="link-button-2">Add Recipe</button>
-          </Link>
-          <Link to="/favorites">
-            <button className="link-button-3">View Favorites</button>
-          </Link>
-          <Link to="/ingredients">
-            <button className="link-button-4">All Ingredients</button>
-          </Link>
+          <div>
+            <Link to="/recipes">
+              <button className="link-button-1">View All Recipes</button>
+            </Link>
+            <Link to="/add-recipe">
+              <button className="link-button-2">Add Recipe</button>
+            </Link>
+            <Link to="/favorites">
+              <button className="link-button-3">View Favorites</button>
+            </Link>
+            <Link to="/ingredients">
+              <button className="link-button-4">All Ingredients</button>
+            </Link>
+          </div>
         </div>
       </div>
 
