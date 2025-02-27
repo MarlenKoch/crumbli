@@ -8,7 +8,7 @@ import "./Home.css";
 
 const Home: React.FC = () => {
   return (
-    <div className="">
+    <div className="container-home">
       <div className="topnav">
         <p className="big-header">CRÜMBLI</p>
         <RecipeSearchBar />

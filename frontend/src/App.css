@@ -63,8 +63,8 @@ body {
   display: flex;
   justify-content: space-between;
   width: calc(100vw - 80px); /* Make the container as wide as the viewport */
-  margin: 20px; /* Ensure no default margin */
-  padding: 20px; /* Ensure no default padding */
+  margin: 0px; /* Ensure no default margin */
+  padding: 0px; /* Ensure no default padding */
   margin-top: 0;
   margin-bottom: 0;
   box-sizing: border-box; /* Include padding and border in element's total width */

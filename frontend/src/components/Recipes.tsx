@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Recipes.css";
 
 interface Recipe {
   id: number;
@@ -31,7 +32,7 @@ const Recipes: React.FC = () => {
   return (
     <div>
       <h2>Recipes</h2>
-      <div className="container-scrollable-wrap">
+      <div className="container-for-recipes">
         {recipes.map((recipe) => {
           const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
           return (
@@ -45,10 +46,13 @@ const Recipes: React.FC = () => {
                 height: 270,
                 width: 270,
                 borderRadius: 10,
+                backgroundColor: "#a37862",
               }}
               className="image-button"
             >
-              <h3 className="text-with-bg">{recipe.name}</h3>
+              <div className="text-with-bg">
+                <h3>{recipe.name}</h3>
+              </div>
 
               {/* {recipe.image && (
                 <img
@@ -65,7 +69,7 @@ const Recipes: React.FC = () => {
           );
         })}
       </div>
-      <button onClick={() => navigate(`/`)}>Zurück</button>
+
     </div>
   );
 };
