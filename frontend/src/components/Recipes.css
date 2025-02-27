@@ -9,6 +9,10 @@
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   text-align: center;
+
+  word-wrap: break-word; /* Breaks long words at the edge of the container */
+  overflow-wrap: break-word; /* Breaks long words inside a container */
+  hyphens: auto; /* Adds hyphens if needed when breaking words */
 }
 
 .image-button:hover {

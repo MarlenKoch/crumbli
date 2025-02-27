@@ -13,11 +13,12 @@ const Home: React.FC = () => {
         <p className="big-header">CRÜMBLI</p>
         <RecipeSearchBar />
       </div>
-      <div className="topnav">
+      <div className="home-page">
         <div className="column-left">
           <RandomRecipes />
         </div>
         <div className="column-right">
+
           <Link to="/recipes">
             <button className="link-button-1">Alle Rezepte</button>
           </Link>

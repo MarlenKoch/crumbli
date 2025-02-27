@@ -28,9 +28,13 @@
 }
 
 .column-right {
-  width: calc (100vw-400px);
+  width: calc(100vw - 400px);
   margin-top: 0;
   padding-top: 0;
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Align children in a column */
+  align-items: flex-start; /* Align children to the start of the column (left) */
+  justify-content: flex-start; /* Align children to the top of the container */
 }
 
 .topnav {
@@ -38,61 +42,45 @@
   display: flex;
   flex-direction: row;
   margin-top: 0;
-  padding-top: 0;
 }
 
-.cake-image {
-  height: 20px;
+.home-page {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  margin-top: 0;
+  padding-top: 10;
+}
+
+.link-button-1,
+.link-button-2,
+.link-button-3,
+.link-button-4 {
+  background-color: #5d7951;
+  height: 580px;
+  width: 225px;
+  background-size: 430px, cover;
+  background-position: center, center;
+  box-shadow: 0 2px 15px -2px var(--brown2);
+  color: #5b3a29;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px;
+  margin-top: 0;
 }
 
 .link-button-1 {
-  background-color: #5d7951;
-  height: 560px;
-  width: 225px;
   background-image: url("transparent-text-field.png"), url("IMG_9170.jpg");
-  background-size: 430px, cover;
-  background-position: center, center;
-  box-shadow: 0 2px 15px -2px var(--brown2);
-  color: #5b3a29;
-  font-size: 20px;
-  font-weight: bold;
 }
 
 .link-button-2 {
-  background-color: #5d7951;
-  height: 560px;
-  width: 225px;
   background-image: url("transparent-text-field.png"), url("IMG_9172.jpg");
-  background-size: 430px, cover;
-  background-position: center, center;
-  box-shadow: 0 2px 15px -2px var(--brown2);
-  color: #5b3a29;
-  font-size: 20px;
-  font-weight: bold;
 }
 
 .link-button-3 {
-  background-color: #5d7951;
-  height: 560px;
-  width: 225px;
   background-image: url("transparent-text-field.png"), url("IMG_9171.jpg");
-  background-size: 430px, cover;
-  background-position: center, center;
-  box-shadow: 0 2px 15px -2px var(--brown2);
-  color: #5b3a29;
-  font-size: 20px;
-  font-weight: bold;
 }
 
 .link-button-4 {
-  background-color: #5d7951;
-  height: 560px;
-  width: 225px;
   background-image: url("transparent-text-field.png"), url("IMG_9173.jpg");
-  background-size: 430px, cover;
-  background-position: center, center;
-  box-shadow: 0 2px 15px -2px var(--brown2);
-  color: #5b3a29;
-  font-size: 20px;
-  font-weight: bold;
 }
