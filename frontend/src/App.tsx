@@ -35,7 +35,7 @@ const App: React.FC = () => {
             <Route path="/ueber-uns" element={<UeberUns />} />
           </Routes>
         </div>
-        <FooterBar /> {/* Ensure the FooterBar is outside the Routes */}
+        <FooterBar />
       </div>
     </Router>
   );

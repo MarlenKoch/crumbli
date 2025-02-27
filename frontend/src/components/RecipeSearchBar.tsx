@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./RecipeSearchBar.css"
 
 interface Recipe {
   id: number;
@@ -72,9 +73,8 @@ const RecipeSearchBar: React.FC = () => {
       <div className="search-container">
         <input
           type="text"
-          className={`search-input ${
-            searchResults.length > 0 ? "has-results" : ""
-          }`}
+          className={`search-input ${searchResults.length > 0 ? "has-results" : ""
+            }`}
           placeholder="Search for recipes..."
           value={searchQuery}
           onChange={handleSearchChange}

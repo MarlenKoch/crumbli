@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./RandomRecipe.css"
 
 interface Recipe {
   id: number;
@@ -59,24 +60,20 @@ const RandomRecipes: React.FC = () => {
       <div>
         {categories.map((category) => (
           <div key={category} style={{ marginBottom: "20px" }}>
-            <h3>{category}</h3>
             {recipes[category] ? (
               <div
                 onClick={() => handleRecipeClick(recipes[category]!.id)}
-                style={{ cursor: "pointer", marginBottom: "10px" }}
+                className="polaroid"
               >
-                <h4>{recipes[category]!.name}</h4>
+
                 {recipes[category]!.image && (
                   <img
                     src={`http://localhost:3000${recipes[category]!.image}`} // Construct full image URL
                     alt={recipes[category]!.name}
-                    style={{
-                      width: "150px",
-                      height: "100px",
-                      objectFit: "cover",
-                    }}
+                    className="img-a"
                   />
                 )}
+                <p className="text-a">heute {category}: {recipes[category]!.name}</p>
               </div>
             ) : (
               <p>No recipes available in this category.</p>
@@ -86,7 +83,7 @@ const RandomRecipes: React.FC = () => {
       </div>
       <button
         onClick={handleRefresh}
-        style={{ marginBottom: "20px", cursor: "pointer" }}
+        className="refresh-button"
       >
         Refresh
       </button>

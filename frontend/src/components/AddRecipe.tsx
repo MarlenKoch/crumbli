@@ -271,6 +271,6 @@ const AddRecipe: React.FC = () => {
       </button>
     </div>
   );
-};
+}
 
 export default AddRecipe;
