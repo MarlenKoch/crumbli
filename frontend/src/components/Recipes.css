@@ -1,0 +1,15 @@
+.text-with-bg {
+  /* position: absolute; Position relative to .recipe-box */
+  top: 600px; /* Align to the bottom of the box */
+  left: 0; /* Align to the left edge */
+  width: 95%; /* Cover the full width of the box */
+  height: 30%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  color: #ffffff; /* Text color */
+  padding: 10px; /* Space around the text */
+  /* box-sizing: border-box; Include padding in the element's total width and height */
+}
+
+.image-button:hover {
+  transform: scale(1.05);
+}
