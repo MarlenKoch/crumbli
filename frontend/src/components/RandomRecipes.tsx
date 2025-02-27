@@ -14,7 +14,7 @@ interface Recipe {
 
 const RandomRecipes: React.FC = () => {
   const [recipes, setRecipes] = useState<Record<string, Recipe | null>>({});
-  const categories = ["Kochen", "Backen"]; // Add more categories as needed
+  const categories = ["Kochen", "Backen"];
   const navigate = useNavigate();
 
   const fetchRandomRecipeForCategory = async (category: string) => {
@@ -68,7 +68,6 @@ const RandomRecipes: React.FC = () => {
 
     adjustFontSize();
 
-    // In case categories or recipes change and font size needs re-calculation
   }, [categories, recipes]);
 
   return (
@@ -83,7 +82,7 @@ const RandomRecipes: React.FC = () => {
               >
                 {recipes[category]!.image && (
                   <img
-                    src={`http://localhost:3000${recipes[category]!.image}`} // Construct full image URL
+                    src={`http://localhost:3000${recipes[category]!.image}`}
                     alt={recipes[category]!.name}
                     className="img-a"
                   />
@@ -93,14 +92,13 @@ const RandomRecipes: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <p>No recipes available in this category.</p>
+              <p>In dieser Kategorie gibt es noch keine Rezepte.</p>
             )}
           </div>
         ))}
       </div>
       <button onClick={handleRefresh} className="refresh-button">
-        Refresh
-      </button>
+        Neue zufällige Rezepte      </button>
     </div>
   );
 };

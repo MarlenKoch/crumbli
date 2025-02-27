@@ -69,6 +69,7 @@ const Recipes: React.FC = () => {
           );
         })}
       </div>
+
     </div>
   );
 };

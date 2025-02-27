@@ -37,7 +37,7 @@ const RecipeSearchBar: React.FC = () => {
           alert("Error fetching recipes.");
         });
     } else {
-      setSearchResults([]); // Clear results if searchQuery is empty
+      setSearchResults([]);
     }
   }, [searchQuery]);
 
@@ -75,7 +75,7 @@ const RecipeSearchBar: React.FC = () => {
           type="text"
           className={`search-input ${searchResults.length > 0 ? "has-results" : ""
             }`}
-          placeholder="Search for recipes..."
+          placeholder="Nach Rezepten suchen ..."
           value={searchQuery}
           onChange={handleSearchChange}
         />
