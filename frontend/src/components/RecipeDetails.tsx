@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import alienImage from '../../assets/alien.jpg';
+
 
 interface Ingredient {
   id: number;
@@ -73,7 +75,7 @@ const RecipeDetails: React.FC = () => {
   }
 
   // Ensure that the image path is prefixed with the correct base URL
-  const imageSrc = `http://localhost:3000${recipe.image}`;
+  const imageSrc = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage;
 
   return (
     <div className="container-scrollable">

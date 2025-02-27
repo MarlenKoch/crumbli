@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Recipes.css";
 
+
 interface Recipe {
   id: number;
   name: string;
@@ -40,7 +41,7 @@ const Recipes: React.FC = () => {
               key={recipe.id}
               onClick={() => handleRecipeClick(recipe.id)}
               style={{
-                backgroundImage: `url(${imageUrl})`,
+                backgroundImage: `url(${imageUrl}), url(../../assets/alien.jpg)`,
                 backgroundSize: "cover", // Optional: Add to make the image cover the div
                 backgroundPosition: "center",
                 height: 270,

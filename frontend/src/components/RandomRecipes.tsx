@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./RandomRecipe.css";
+import alienImage from '../../assets/alien.jpg';
+
 
 interface Recipe {
   id: number;
@@ -70,6 +72,9 @@ const RandomRecipes: React.FC = () => {
 
   }, [categories, recipes]);
 
+  // Ensure that the image path is prefixed with the correct base URL
+  const imageSrc = recipes.image ? `http://localhost:3000${recipes[category]!.image}` : alienImage;
+
   return (
     <div>
       <div>
@@ -80,15 +85,16 @@ const RandomRecipes: React.FC = () => {
                 onClick={() => handleRecipeClick(recipes[category]!.id)}
                 className="polaroid"
               >
-                {recipes[category]!.image && (
-                  <img
-                    src={`http://localhost:3000${recipes[category]!.image}`}
-                    alt={recipes[category]!.name}
-                    className="img-a"
-                  />
-                )}
+                <img
+                  src={recipes[category]!.image ? `http://localhost:3000${recipes[category]!.image}` : alienImage}
+                  alt={recipes[category]!.name}
+                  className="img-a"
+                />
+
+
                 <p className="text-a">
                   heute {category}: {recipes[category]!.name}
+                  {recipes[category]!.image}
                 </p>
               </div>
             ) : (

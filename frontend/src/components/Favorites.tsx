@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import alienImage from '../../assets/alien.jpg';
+
 
 interface Recipe {
   id: number;
@@ -37,7 +39,7 @@ const Favorites: React.FC = () => {
       <div className="container-scrollable">
         <ul>
           {recipes.map((recipe) => {
-            const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
+            const imageUrl = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage; // Construct full image URL
             return (
               <li key={recipe.id} onClick={() => handleRecipeClick(recipe.id)}>
                 <h3>{recipe.name}</h3>
