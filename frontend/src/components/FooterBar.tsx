@@ -9,7 +9,7 @@ const FooterBar: React.FC = () => {
           Impressum
         </Link>
         <Link to="/data-safety" className="white-link">
-          Data Safety Information
+          Datenschutzhinweis
         </Link>
         <Link to="/pizza-ist-toll" className="white-link">
           Warum Pizza toll ist
