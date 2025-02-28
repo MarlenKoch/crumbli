@@ -12,6 +12,9 @@
   font-weight: bold;
   font-size: 24px;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  word-wrap: break-word; /* Breaks long words at the edge of the container */
+  overflow-wrap: break-word; /* Breaks long words inside a container */
+  hyphens: auto; /* Adds hyphens if needed when breaking words */
 }
 
 .polaroid {
