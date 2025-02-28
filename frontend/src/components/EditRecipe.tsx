@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Ingredient {
   id: number;
@@ -50,11 +52,10 @@ const EditRecipe: React.FC = () => {
       .get(`http://localhost:3000/api/recipes/${id}`)
       .then((res) => {
         setRecipe(res.data);
-        //setOriginalRecipe(res.data);
       })
       .catch((err) => {
         console.error(err);
-        alert("Error loading recipe details.");
+        toast.error("Error loading recipe details.");
       });
   }, [id]);
 
@@ -71,11 +72,11 @@ const EditRecipe: React.FC = () => {
               (ing) => ing.id !== ingredientId
             ),
           });
-          alert("Ingredient deleted successfully.");
+          toast.success("Ingredient deleted successfully.");
         })
         .catch((err) => {
           console.error(err);
-          alert("Error deleting ingredient.");
+          toast.error("Error deleting ingredient.");
         });
     }
   };
@@ -109,16 +110,15 @@ const EditRecipe: React.FC = () => {
 
       setEditingIngredient(null);
       setIsEditingIngredient(false);
-      alert("Ingredient updated successfully.");
+      toast.success("Ingredient updated successfully.");
     } catch (error) {
       console.error("Error updating ingredient: ", error);
-      alert("Error updating ingredient.");
+      toast.error("Error updating ingredient.");
     }
   };
 
   const handleAddIngredient = async () => {
     try {
-      // Attempt to find the existing ingredient
       const response = await axios.get(
         "http://localhost:3000/api/ingredients/id",
         {
@@ -126,24 +126,20 @@ const EditRecipe: React.FC = () => {
         }
       );
 
-      // Retrieve the ingredient ID from the response
       const ingredientId = response.data.ingredient_id;
 
       if (ingredientId) {
-        // Proceed to link this existing ingredient to the recipe
         await addIngredientToRecipe(ingredientId);
       } else {
         throw new Error("Ingredient ID not found");
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        // Handle a 404 response, indicating the ingredient wasn't found
         if (err.response && err.response.status === 404) {
           if (
             window.confirm(`${newIngredient.name} does not exist. Create it?`)
           ) {
             try {
-              // Create new ingredient if confirmed
               const createResponse = await axios.post(
                 "http://localhost:3000/api/ingredients",
                 {
@@ -155,16 +151,18 @@ const EditRecipe: React.FC = () => {
               await addIngredientToRecipe(newIngredientId);
             } catch (creationError) {
               console.error("Error creating ingredient: ", creationError);
-              alert("An error occurred while creating the new ingredient.");
+              toast.error(
+                "An error occurred while creating the new ingredient."
+              );
             }
           }
         } else {
           console.error("API error: ", err.response ?? err.message);
-          alert(`API error: ${err.response?.data?.error || err.message}`);
+          toast.error(`API error: ${err.response?.data?.error || err.message}`);
         }
       } else {
         console.error("Unexpected error: ", err);
-        alert("Unexpected error occurred while adding the ingredient.");
+        toast.error("Unexpected error occurred while adding the ingredient.");
       }
     }
   };
@@ -196,61 +194,63 @@ const EditRecipe: React.FC = () => {
       resetIngredientModal();
     } catch (error) {
       console.error("Error adding ingredient to recipe: ", error);
-      alert("Error adding ingredient to recipe.");
+      toast.error("Error adding ingredient to recipe.");
     }
   };
 
   const handleDetailSubmit = async () => {
     if (!recipe) return;
 
-    let imagePath = recipe.image; // Default to existing image
-
-    // Upload new image if available
-    if (imageFile) {
-      try {
-        const formData = new FormData();
-        formData.append("image", imageFile);
-        const response = await axios.post(
-          "http://localhost:3000/api/upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        imagePath = response.data.filePath;
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        alert("Error uploading new image.");
-        return;
+    try {
+      if (imageFile) {
+        await uploadImage();
       }
-    }
 
-    axios
-      .put(`http://localhost:3000/api/recipes/${id}/details`, {
+      await axios.put(`http://localhost:3000/api/recipes/${id}/details`, {
         name: recipe.name,
-        image: imagePath, // Use new image path if changed
+        image: imageFile ? `${recipe.image}` : recipe.image, // Use new image if uploaded
         instructions: recipe.instructions,
         favorite: recipe.favorite,
         category: recipe.category,
-      })
-      .then(() => {
-        alert("Recipe details updated successfully.");
-        //setOriginalRecipe({ ...recipe, image: imagePath });
-        setImageFile(null); // Reset image file after saving
-        setIsEditing({
-          name: false,
-          image: false,
-          instructions: false,
-          category: false,
-          favorite: false,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Error updating recipe details.");
       });
+
+      toast.success("Recipe details updated successfully.");
+      setIsEditing({
+        name: false,
+        image: false,
+        instructions: false,
+        category: false,
+        favorite: false,
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("Error updating recipe details.");
+    }
+  };
+
+  const uploadImage = async () => {
+    try {
+      if (!imageFile) return;
+
+      const formData = new FormData();
+      formData.append("image", imageFile);
+      const response = await axios.post(
+        "http://localhost:3000/api/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setImageFile(null);
+      setRecipe((prev) =>
+        prev ? { ...prev, image: response.data.filePath } : prev
+      ); // Set new image path
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Error uploading new image.");
+    }
   };
 
   const handleDetailEdit = (field: keyof RecipeDetail, value: unknown) => {
@@ -272,8 +272,8 @@ const EditRecipe: React.FC = () => {
     }));
   };
 
-  const handleBackToRecipe = () => {
-    handleDetailSubmit();
+  const handleBackToRecipe = async () => {
+    await handleDetailSubmit(); // Ensure details are submitted before navigating
     navigate(`/recipe-details/${id}`);
   };
 
