@@ -1,0 +1,14 @@
+.edit-recipe-box {
+  align-items: center;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 20px);
+  font-size: x-large;
+  width: calc(100vw - 100px);
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  padding-left: 2rem;
+  text-align: center;
+}

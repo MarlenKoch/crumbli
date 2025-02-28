@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import './EditRecipe.css'
 
 interface Ingredient {
   id: number;
@@ -296,7 +297,7 @@ const EditRecipe: React.FC = () => {
   const imageSrc = `http://localhost:3000${recipe.image}`;
 
   return (
-    <div className="container-scrollable">
+    <div className="edit-recipe-box">
       <h2>Editing: {recipe.name}</h2>
       <div>
         <label>
@@ -404,7 +405,7 @@ const EditRecipe: React.FC = () => {
               onClick={() => handleIngredientClick(ingredient)}
             >
               {isEditingIngredient &&
-              editingIngredient?.id === ingredient.id ? (
+                editingIngredient?.id === ingredient.id ? (
                 <div>
                   <input
                     type="text"
