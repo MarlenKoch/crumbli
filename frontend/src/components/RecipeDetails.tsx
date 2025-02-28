@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import alienImage from '../../assets/alien.jpg';
+import './RecipeDetails.css'
+import star from '../../assets/star.png'
 
 
 interface Ingredient {
@@ -78,22 +80,28 @@ const RecipeDetails: React.FC = () => {
   const imageSrc = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage;
 
   return (
-    <div className="container-scrollable">
-      <h2>{recipe.name}</h2>
+    <div className="recipe-detail-box">
+      <div className="star-icon">
+        <h2 style={{ display: "inline-block", marginRight: "10px" }}>{recipe.name}</h2>
+        {recipe.favorite && (
+          <Link to="/favorites">
+            <img
+              src={star}
+              alt="Favorit"
+              style={{ width: "50px", height: "50px", objectFit: "contain", verticalAlign: 'middle' }}
+            />
+          </Link>
+        )}
+      </div>
       <img
         src={imageSrc}
         alt={recipe.name}
-        style={{ width: "300px", height: "200px", objectFit: "cover" }}
+        className="recipe-image"
       />
       <p>
         <strong>Anleitung:</strong> {recipe.instructions}
       </p>
-      <p>
-        <strong>Kategorie:</strong> {recipe.category}
-      </p>
-      <p>
-        <strong>Favorit?:</strong> {recipe.favorite ? "Yes" : "No"}
-      </p>
+
       <h3>Zutaten:</h3>
       <ul>
         {recipe.ingredients.map((ingredient) => (
@@ -102,11 +110,14 @@ const RecipeDetails: React.FC = () => {
           </li>
         ))}
       </ul>
+      <p style={{ fontStyle: "italic" }}>
+        Kategorie: {recipe.category}
+      </p>
       <button onClick={handleEdit}>Rezept bearbeiten</button>
       <button onClick={handleDelete}>Rezept löschen</button>
       <button onClick={handleBack}>zurück</button>
-    </div>
+    </div >
   );
-};
+}
 
 export default RecipeDetails;
