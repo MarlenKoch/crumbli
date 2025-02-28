@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import alienImage from '../../assets/alien.jpg';
+import './Favorites.css'
 
 
 interface Recipe {
@@ -35,32 +36,27 @@ const Favorites: React.FC = () => {
 
   return (
     <div>
-      <h2>Favorite Recipes</h2>
-      <div className="container-scrollable">
-        <ul>
-          {recipes.map((recipe) => {
-            const imageUrl = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage; // Construct full image URL
-            return (
-              <li key={recipe.id} onClick={() => handleRecipeClick(recipe.id)}>
-                <h3>{recipe.name}</h3>
-                <img
-                  src={imageUrl}
-                  alt={recipe.name}
-                  style={{
-                    width: "600px",
-                    height: "200px",
-                    objectFit: "cover",
-                  }}
-                />
-                <p>{recipe.instructions}</p>
-                <p>Category: {recipe.category}</p>
-                <p>Favorite: {recipe.favorite ? "Yes" : "No"}</p>
-              </li>
-            );
-          })}
-        </ul>
+      <h2>Meine Favoriten</h2>
+      <div className="favourites-box">
+        {recipes.map((recipe) => {
+          const imageUrl = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage; // Construct full image URL
+          return (
+            <li key={recipe.id} onClick={() => handleRecipeClick(recipe.id)}>
+              <h3>{recipe.name}</h3>
+              <img
+                src={imageUrl}
+                alt={recipe.name}
+                style={{
+                  width: "600px",
+                  height: "200px",
+                  objectFit: "cover",
+                }}
+              />
+              <p style={{ fontSize: "medium", fontStyle: "italic" }}>Kategorie: {recipe.category}</p>
+            </li>
+          );
+        })}
       </div>
-      <button onClick={() => navigate(`/`)}>Back</button>
     </div>
   );
 };
