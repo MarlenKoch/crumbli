@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
-import alienImage from '../../assets/alien.jpg';
+import alienImage from '../../assets/alienNarrow.png';
 import './RecipeDetails.css'
 import star from '../../assets/star.png'
 

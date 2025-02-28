@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import alienImage from '../../assets/alien.jpg';
+import alienImage from '../../assets/alienNarrow.png';
 import './Favorites.css'
 
 
@@ -39,9 +39,9 @@ const Favorites: React.FC = () => {
       <h2>Meine Favoriten</h2>
       <div className="favourites-box">
         {recipes.map((recipe) => {
-          const imageUrl = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage; // Construct full image URL
+          const imageUrl = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage;
           return (
-            <li key={recipe.id} onClick={() => handleRecipeClick(recipe.id)}>
+            <li key={recipe.id} onClick={() => handleRecipeClick(recipe.id)} className="recipe">
               <h3>{recipe.name}</h3>
               <img
                 src={imageUrl}
