@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Ingredient {
   name: string;
@@ -11,87 +13,91 @@ interface Ingredient {
 
 const AddRecipe: React.FC = () => {
   const [name, setName] = useState<string>("");
-  //const [image, setImage] = useState<string>("");
   const [instructions, setInstructions] = useState<string>("");
   const [favorite, setFavorite] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("Kochen");
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const navigate = useNavigate(); // Use navigate instead of history
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [newIngredient, setNewIngredient] = useState<Ingredient>({
+    name: "",
+    amount: "",
+    unit: "",
+  });
+  const [showIngredientModal, setShowIngredientModal] =
+    useState<boolean>(false);
+  const navigate = useNavigate();
   const [imagePath, setImagePath] = useState<string>("");
   const characterLimit = 77;
 
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, { name: "", amount: "", unit: "" }]);
+    setShowIngredientModal(true);
   };
 
-  const handleIngredientChange = (
-    index: number,
+  const handleNewIngredientChange = (
     field: keyof Ingredient,
     value: string
   ) => {
-    const newIngredients = [...ingredients];
-    if (field in newIngredients[index]) {
-      // Ensure TypeScript understands these assignments are valid
-      (newIngredients[index][field] as string) = value;
-    }
-    setIngredients(newIngredients);
+    setNewIngredient({ ...newIngredient, [field]: value });
   };
 
-  const checkAndAddIngredient = async (name: string, index: number) => {
-    try {
-      const response = await axios.get(
-        "http://localhost:3000/api/ingredients/id",
-        {
-          params: { name },
-        }
-      );
+  const addNewIngredientToList = () => {
+    setIngredients([...ingredients, { ...newIngredient }]);
+    setNewIngredient({ name: "", amount: "", unit: "" });
+    setShowIngredientModal(false);
+  };
 
-      if (response.data.ingredient_id) {
-        const newIngredients = [...ingredients];
-        newIngredients[index].id = response.data.ingredient_id;
-        setIngredients(newIngredients);
-        alert("Ingredient already exists.");
-      }
-    } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        (error.response?.status === 404 || error.response?.status === 400)
-      ) {
-        const shouldAdd = window.confirm(
-          `Ingredient "${name}" does not exist. Add it?`
-        );
-        if (shouldAdd) {
-          try {
-            const addResponse = await axios.post(
-              "http://localhost:3000/api/ingredients",
-              { name }
+  const handleCheckAndSubmitRecipe = async () => {
+    if (!name || !instructions) {
+      return toast.error("Name and instructions are required!");
+    }
+
+    for (let i = 0; i < ingredients.length; i++) {
+      const ingredient = ingredients[i];
+      if (!ingredient.id) {
+        try {
+          const response = await axios.get(
+            "http://localhost:3000/api/ingredients/id",
+            { params: { name: ingredient.name } }
+          );
+
+          ingredient.id = response.data.ingredient_id;
+        } catch (error) {
+          if (
+            axios.isAxiosError(error) &&
+            (error.response?.status === 404 || error.response?.status === 400)
+          ) {
+            const shouldAdd = window.confirm(
+              `Ingredient "${ingredient.name}" does not exist. Add it?`
             );
-            const newIngredients = [...ingredients];
-            newIngredients[index].id = addResponse.data.ingredient.id;
-            setIngredients(newIngredients);
-            alert("Ingredient added successfully.");
-          } catch (addError) {
-            console.error(addError);
-            alert("Error adding ingredient.");
+            if (shouldAdd) {
+              try {
+                const addResponse = await axios.post(
+                  "http://localhost:3000/api/ingredients",
+                  { name: ingredient.name }
+                );
+                ingredient.id = addResponse.data.ingredient.id;
+              } catch (addError) {
+                console.error(addError);
+                return toast.error("Error adding ingredient.");
+              }
+            } else {
+              return;
+            }
+          } else {
+            console.error(error);
+            return toast.error("Error checking ingredient.");
           }
         }
-      } else {
-        console.error(error);
-        alert("Error checking ingredient.");
       }
     }
+
+    submitRecipe();
   };
 
-  const handleAddRecipe = () => {
-    if (!name || !instructions) {
-      return alert("Name and instructions are required!");
-    }
-
+  const submitRecipe = () => {
     axios
       .post("http://localhost:3000/api/recipes", {
         name,
-        image: imagePath, //<-- Updated here to use uploaded image path.
+        image: imagePath,
         instructions,
         favorite,
         category,
@@ -102,42 +108,37 @@ const AddRecipe: React.FC = () => {
         })),
       })
       .then(() => {
-        alert("Recipe added successfully!");
+        toast.success("Recipe added successfully!");
         navigate(`/`);
       })
       .catch((err) => {
         console.error(err);
-        alert("Error adding recipe.");
+        toast.error("Error adding recipe.");
       });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setImageFile(e.target.files[0]);
-    }
-  };
+      const selectedFile = e.target.files[0];
 
-  const handleImageUpload = async () => {
-    if (!imageFile) return;
+      // Automatically upload the file upon selection
+      const formData = new FormData();
+      formData.append("image", selectedFile);
 
-    const formData = new FormData();
-    formData.append("image", imageFile);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setImagePath(response.data.filePath);
-      alert("Image uploaded successfully!");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Error uploading image.");
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        setImagePath(response.data.filePath);
+        toast.success("Image uploaded successfully!");
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        toast.error("Error uploading image.");
+      }
     }
   };
 
@@ -148,110 +149,131 @@ const AddRecipe: React.FC = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate("/");
+  };
+
   return (
-    <div className="add-recipe-container">
-      <h2>Add Recipe</h2>
-      <div className="form-group">
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={handleChange}
-          // onChange={(e) => setName(e.target.value)}
-          className="input-field"
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="input-file"
-        />
-        <button onClick={handleImageUpload} className="upload-button">
-          Upload Image
+    <>
+      <div className="add-recipe-container">
+        <h2>Add Recipe</h2>
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={handleChange}
+            className="input-field"
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="input-file"
+          />
+        </div>
+        <div className="form-group">
+          <textarea
+            placeholder="Instructions"
+            value={instructions}
+            onChange={(e) => setInstructions(e.target.value)}
+            className="textarea-field"
+          />
+        </div>
+        <div className="form-group-inline">
+          <label>
+            Favorite:
+            <input
+              type="checkbox"
+              checked={favorite}
+              onChange={(e) => setFavorite(e.target.checked)}
+            />
+          </label>
+          <label>
+            Category:
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="select-field"
+            >
+              <option value="Kochen">Kochen</option>
+              <option value="Backen">Backen</option>
+            </select>
+          </label>
+        </div>
+        <h3>Ingredients</h3>
+        <div>
+          {ingredients.map((ingredient, index) => (
+            <div className="ingredient-group" key={index}>
+              {ingredient.name} - {ingredient.amount} {ingredient.unit}
+            </div>
+          ))}
+        </div>
+        <button onClick={handleAddIngredient} className="action-button">
+          Add Ingredient
+        </button>
+        <button onClick={handleCheckAndSubmitRecipe} className="action-button">
+          Add Recipe
+        </button>
+        <button onClick={handleCancel} className="action-button">
+          Cancel
         </button>
       </div>
 
-      <div className="form-group">
-        <textarea
-          placeholder="Instructions"
-          value={instructions}
-          onChange={(e) => setInstructions(e.target.value)}
-          className="textarea-field"
-        />
-      </div>
-      <div className="form-group-inline">
-        <label>
-          Favorite:
-          <input
-            type="checkbox"
-            checked={favorite}
-            onChange={(e) => setFavorite(e.target.checked)}
-          />
-        </label>
-        <label>
-          Category:
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="select-field"
-          >
-            <option value="Kochen">Kochen</option>
-            <option value="Backen">Backen</option>
-          </select>
-        </label>
-      </div>
-      <h3>Ingredients</h3>
-      {ingredients.map((ingredient, index) => (
-        <div className="ingredient-group" key={index}>
-          <input
-            type="text"
-            placeholder="Ingredient Name"
-            value={ingredient.name}
-            onChange={(e) =>
-              handleIngredientChange(index, "name", e.target.value)
-            }
-            onBlur={() => checkAndAddIngredient(ingredient.name, index)}
-            className="input-field"
-          />
-          <input
-            type="text"
-            placeholder="Amount"
-            value={ingredient.amount}
-            onChange={(e) =>
-              handleIngredientChange(index, "amount", e.target.value)
-            }
-            className="input-field"
-          />
-          <select
-            onChange={(e) =>
-              handleIngredientChange(index, "unit", e.target.value)
-            }
-            className="select-field"
-          >
-            <option value="TL">TL</option>
-            <option value="EL">EL</option>
-            <option value="Pck">Pck</option>
-            <option value="Tasse">Tasse</option>
-            <option value="g">g</option>
-            <option value="Kg">Kg</option>
-            <option value="l">l</option>
-            <option value="Blt">Blt</option>
-            <option value="ml">ml</option>
-            <option value="Prise">Prise</option>
-            <option value="Tropfen">Tropfen</option>
-            <option value=" ">-</option>
-          </select>
+      {showIngredientModal && (
+        <div className="ingredient-modal">
+          <h3>Add New Ingredient</h3>
+          <label>
+            Name:
+            <input
+              type="text"
+              value={newIngredient.name}
+              onChange={(e) =>
+                handleNewIngredientChange("name", e.target.value)
+              }
+            />
+          </label>
+          <label>
+            Amount:
+            <input
+              type="text"
+              value={newIngredient.amount}
+              onChange={(e) =>
+                handleNewIngredientChange("amount", e.target.value)
+              }
+            />
+          </label>
+          <label>
+            Unit:
+            <select
+              value={newIngredient.unit}
+              onChange={(e) =>
+                handleNewIngredientChange("unit", e.target.value)
+              }
+            >
+              <option value="TL">TL</option>
+              <option value="EL">EL</option>
+              <option value="Pck">Pck</option>
+              <option value="Tasse">Tasse</option>
+              <option value="g">g</option>
+              <option value="Kg">Kg</option>
+              <option value="l">l</option>
+              <option value="Blt">Blt</option>
+              <option value="ml">ml</option>
+              <option value="Prise">Prise</option>
+              <option value="Tropfen">Tropfen</option>
+              <option value=" ">-</option>
+            </select>
+          </label>
+          <button onClick={addNewIngredientToList}>Confirm</button>
+          <button onClick={() => setShowIngredientModal(false)}>Cancel</button>
         </div>
-      ))}
-      <button onClick={handleAddIngredient} className="action-button">
-        Add Ingredient
-      </button>
-      <button onClick={handleAddRecipe} className="action-button">
-        Add Recipe
-      </button>
-    </div>
+      )}
+
+      <ToastContainer position="top-right" autoClose={5000} />
+    </>
   );
 };
 
