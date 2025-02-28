@@ -97,7 +97,6 @@ const RandomRecipes: React.FC = () => {
 
                 <p className="text-a">
                   heute {category}: {recipes[category]!.name}
-                  {recipes[category]!.image}
                 </p>
               </div>
             ) : (
