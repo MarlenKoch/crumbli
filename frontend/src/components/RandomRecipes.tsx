@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./RandomRecipe.css";
-import alienImage from '../../assets/alien.jpg';
+import alienImage from '../../assets/alienNarrow.png';
 
 
 interface Recipe {

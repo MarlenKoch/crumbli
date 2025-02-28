@@ -15,6 +15,9 @@
   hyphens: auto; /* Adds hyphens if needed when breaking words */
 }
 
+.image-button {
+  transition: 0.25s;
+}
 .image-button:hover {
   transform: scale(1.05);
 }
