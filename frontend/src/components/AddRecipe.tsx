@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Ingredient {
   name: string;
@@ -23,7 +25,6 @@ const AddRecipe: React.FC = () => {
   const [showIngredientModal, setShowIngredientModal] =
     useState<boolean>(false);
   const navigate = useNavigate();
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePath, setImagePath] = useState<string>("");
   const characterLimit = 77;
 
@@ -46,7 +47,7 @@ const AddRecipe: React.FC = () => {
 
   const handleCheckAndSubmitRecipe = async () => {
     if (!name || !instructions) {
-      return alert("Name and instructions are required!");
+      return toast.error("Name and instructions are required!");
     }
 
     for (let i = 0; i < ingredients.length; i++) {
@@ -76,14 +77,14 @@ const AddRecipe: React.FC = () => {
                 ingredient.id = addResponse.data.ingredient.id;
               } catch (addError) {
                 console.error(addError);
-                return alert("Error adding ingredient.");
+                return toast.error("Error adding ingredient.");
               }
             } else {
               return;
             }
           } else {
             console.error(error);
-            return alert("Error checking ingredient.");
+            return toast.error("Error checking ingredient.");
           }
         }
       }
@@ -107,40 +108,37 @@ const AddRecipe: React.FC = () => {
         })),
       })
       .then(() => {
-        alert("Recipe added successfully!");
+        toast.success("Recipe added successfully!");
         navigate(`/`);
       })
       .catch((err) => {
         console.error(err);
-        alert("Error adding recipe.");
+        toast.error("Error adding recipe.");
       });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setImageFile(e.target.files[0]);
-    }
-  };
+      const selectedFile = e.target.files[0];
 
-  const handleImageUpload = async () => {
-    if (!imageFile) return;
+      // Automatically upload the file upon selection
+      const formData = new FormData();
+      formData.append("image", selectedFile);
 
-    const formData = new FormData();
-    formData.append("image", imageFile);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/upload",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      setImagePath(response.data.filePath);
-      alert("Image uploaded successfully!");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Error uploading image.");
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        setImagePath(response.data.filePath);
+        toast.success("Image uploaded successfully!");
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        toast.error("Error uploading image.");
+      }
     }
   };
 
@@ -175,9 +173,6 @@ const AddRecipe: React.FC = () => {
             onChange={handleFileChange}
             className="input-file"
           />
-          <button onClick={handleImageUpload} className="upload-button">
-            Upload Image
-          </button>
         </div>
         <div className="form-group">
           <textarea
@@ -276,6 +271,8 @@ const AddRecipe: React.FC = () => {
           <button onClick={() => setShowIngredientModal(false)}>Cancel</button>
         </div>
       )}
+
+      <ToastContainer position="top-right" autoClose={5000} />
     </>
   );
 };
