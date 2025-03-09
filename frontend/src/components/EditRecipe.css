@@ -38,3 +38,30 @@
   font-size: 16px;
   resize: none;
 }
+
+.flex-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-label > span {
+  margin-left: 10px;
+}
+
+.textarea-field {
+  width: 70%;
+  height: 150px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  resize: none;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
