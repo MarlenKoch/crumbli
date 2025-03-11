@@ -62,7 +62,7 @@ body {
 .container-fullscreen {
   display: flex;
   justify-content: space-between;
-  width: calc(100vw - 80px); /* Make the container as wide as the viewport */
+  width: calc(100vw); /* Make the container as wide as the viewport */
   margin: 0px; /* Ensure no default margin */
   padding: 0px; /* Ensure no default padding */
   margin-top: 0;

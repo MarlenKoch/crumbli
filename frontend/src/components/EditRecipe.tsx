@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import './EditRecipe.css'
 
 interface Ingredient {
   id: number;
@@ -39,7 +40,7 @@ const EditRecipe: React.FC = () => {
   const [newIngredient, setNewIngredient] = useState({
     name: "",
     amount: "",
-    unit: "",
+    unit: "TL",
   });
 
   const characterLimit = 77;
@@ -129,7 +130,7 @@ const EditRecipe: React.FC = () => {
       const ingredientId = response.data.ingredient_id;
 
       if (ingredientId) {
-        await addIngredientToRecipe(ingredientId);
+        await addIngredientToRecipe(ingredientId);  //Fehler
       } else {
         throw new Error("Ingredient ID not found");
       }
@@ -167,7 +168,7 @@ const EditRecipe: React.FC = () => {
     }
   };
 
-  const addIngredientToRecipe = async (ingredientId: number) => {
+  const addIngredientToRecipe = async (ingredientId: number) => { //gibt beim bearbeiten einen Fehler
     try {
       await axios.post(`http://localhost:3000/api/recipes/${id}/ingredient`, {
         ingredient_id: ingredientId,
@@ -296,10 +297,10 @@ const EditRecipe: React.FC = () => {
   const imageSrc = `http://localhost:3000${recipe.image}`;
 
   return (
-    <div className="container-scrollable">
-      <h2>Editing: {recipe.name}</h2>
+    <div className="edit-recipe-box">
+      <h2>In Bearbeitung: {recipe.name}</h2>
       <div>
-        <label>
+        <label className="flex-label">
           Name:
           {isEditing.name ? (
             <input
@@ -316,11 +317,14 @@ const EditRecipe: React.FC = () => {
 
       <div>
         <label>
-          Image:
           {isEditing.image ? (
             <div>
               <input type="file" accept="image/*" onChange={handleFileChange} />
-              <button onClick={() => setImageFile(null)}>Cancel</button>
+              <button onClick={() => {
+                setImageFile(null);
+                toggleEdit("image");
+              }
+              }>Abbrechen</button>
             </div>
           ) : (
             <img
@@ -338,11 +342,12 @@ const EditRecipe: React.FC = () => {
         </label>
       </div>
 
-      <div>
-        <label>
-          Instructions:
+      <div >
+        <label className="flex-label">
+          Anleitung:
           {isEditing.instructions ? (
             <textarea
+              className="textarea-field"
               value={recipe.instructions}
               onChange={(e) => handleDetailEdit("instructions", e.target.value)}
               onBlur={() => toggleEdit("instructions")}
@@ -355,9 +360,9 @@ const EditRecipe: React.FC = () => {
         </label>
       </div>
 
-      <div>
-        <label>
-          Category:
+      <div >
+        <label className="flex-label">
+          Kategorie:
           {isEditing.category ? (
             <select
               value={recipe.category}
@@ -376,8 +381,8 @@ const EditRecipe: React.FC = () => {
       </div>
 
       <div>
-        <label>
-          Favorite:
+        <label className="flex-label">
+          Favorit:
           {isEditing.favorite ? (
             <input
               type="checkbox"
@@ -393,18 +398,19 @@ const EditRecipe: React.FC = () => {
         </label>
       </div>
 
-      <button onClick={handleDetailSubmit}>Submit Details</button>
+      <button className="edit-recipe-buttons" onClick={handleDetailSubmit}>Änderungen anwenden</button>
 
       <div>
-        <h3>Ingredients:</h3>
+        <h3>Zutaten: </h3>
         <ul>
           {recipe.ingredients.map((ingredient) => (
             <li
               key={ingredient.id}
               onClick={() => handleIngredientClick(ingredient)}
+              className="ingredient-item"
             >
               {isEditingIngredient &&
-              editingIngredient?.id === ingredient.id ? (
+                editingIngredient?.id === ingredient.id ? (
                 <div>
                   <input
                     type="text"
@@ -437,31 +443,31 @@ const EditRecipe: React.FC = () => {
                     <option value="Prise">Prise</option>
                     <option value="Tropfen">Tropfen</option>
                     <option value=" ">-</option>
+
                   </select>
-                  <button onClick={handleIngredientUpdate}>Update</button>
-                  <button onClick={() => setIsEditingIngredient(false)}>
-                    Cancel
-                  </button>
+                  <button className="edit-recipe-buttons" onClick={handleIngredientUpdate}>Update</button>
+
                 </div>
               ) : (
+
                 <span>
                   {ingredient.amount} {ingredient.unit} {ingredient.name}
                 </span>
               )}
-              <button onClick={() => handleIngredientDelete(ingredient.id)}>
-                <img src="/deleteIcon.png" width={40}></img>
+              <button className="delete-button-eimer" onClick={() => handleIngredientDelete(ingredient.id)}>
+                <img src="/deleteIcon.png" width={50}></img>
               </button>
             </li>
           ))}
         </ul>
-        <button onClick={() => setIsAddingIngredient(true)}>
-          Add Ingredient
+        <button className="edit-recipe-buttons" onClick={() => setIsAddingIngredient(true)}>
+          Zutat hinzufügen
         </button>
       </div>
 
       {isAddingIngredient && (
-        <div className="ingredient-modal">
-          <h3>Add New Ingredient</h3>
+        <div>
+          <h3>Neue Zutat hinzufügen: </h3>
           <label>
             Name:
             <input
@@ -472,8 +478,9 @@ const EditRecipe: React.FC = () => {
               }
             />
           </label>
+
           <label>
-            Amount:
+            Menge:
             <input
               type="text"
               value={newIngredient.amount}
@@ -500,11 +507,11 @@ const EditRecipe: React.FC = () => {
             <option value="Tropfen">Tropfen</option>
             <option value=" ">-</option>
           </select>
-          <button onClick={handleAddIngredient}>Add Ingredient</button>
-          <button onClick={resetIngredientModal}>Cancel</button>
+          <button className="edit-recipe-buttons" onClick={handleAddIngredient}>Hinzufügen</button>
+          <button className="edit-recipe-buttons" onClick={resetIngredientModal}>Abbrechen</button>
         </div>
       )}
-      <button onClick={handleBackToRecipe}>Back to Recipe</button>
+      <button onClick={handleBackToRecipe}>Zurück zum Rezept</button>
     </div>
   );
 };
