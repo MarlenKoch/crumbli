@@ -21,7 +21,7 @@ const AddRecipe: React.FC = () => {
   const [newIngredient, setNewIngredient] = useState<Ingredient>({
     name: "",
     amount: "",
-    unit: "",
+    unit: "TL",
   });
   const [showIngredientModal, setShowIngredientModal] =
     useState<boolean>(false);
