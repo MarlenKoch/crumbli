@@ -83,3 +83,21 @@
 ul {
   list-style-type: none;
 }
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: var(--brown2);
+  border-radius: 5px;
+  transition: 0.25s;
+}
+
+.custom-file-upload:hover {
+  transform: scale(1.05);
+  background-color: var(--brown3);
+}
+
+input[type="file"] {
+  display: none;
+}

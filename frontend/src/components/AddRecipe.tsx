@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./AddRecipe.css";
 
 interface Ingredient {
   name: string;
@@ -167,12 +168,15 @@ const AddRecipe: React.FC = () => {
           />
         </div>
         <div className="form-group">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="input-file"
-          />
+          <label className="custom-file-upload">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="input-file"
+            />
+            Bild hochladen
+          </label>
         </div>
         <div className="form-group">
           <textarea
@@ -211,6 +215,58 @@ const AddRecipe: React.FC = () => {
             </div>
           ))}
         </div>
+
+        {showIngredientModal && (
+          <div className="ingredient-modal">
+            <h4>Add New Ingredient</h4>
+            <label>
+              Name:
+              <input
+                type="text"
+                value={newIngredient.name}
+                onChange={(e) =>
+                  handleNewIngredientChange("name", e.target.value)
+                }
+              />
+            </label>
+            <label>
+              Amount:
+              <input
+                type="text"
+                value={newIngredient.amount}
+                onChange={(e) =>
+                  handleNewIngredientChange("amount", e.target.value)
+                }
+              />
+            </label>
+            <label>
+              Unit:
+              <select
+                value={newIngredient.unit}
+                onChange={(e) =>
+                  handleNewIngredientChange("unit", e.target.value)
+                }
+              >
+                <option value="TL">TL</option>
+                <option value="EL">EL</option>
+                <option value="Pck">Pck</option>
+                <option value="Tasse">Tasse</option>
+                <option value="g">g</option>
+                <option value="Kg">Kg</option>
+                <option value="l">l</option>
+                <option value="Blt">Blt</option>
+                <option value="ml">ml</option>
+                <option value="Prise">Prise</option>
+                <option value="Tropfen">Tropfen</option>
+                <option value=" ">-</option>
+              </select>
+            </label>
+            <button onClick={addNewIngredientToList}>Confirm</button>
+            <button onClick={() => setShowIngredientModal(false)}>
+              Cancel
+            </button>
+          </div>
+        )}
         <button onClick={handleAddIngredient} className="action-button">
           Add Ingredient
         </button>
@@ -221,56 +277,6 @@ const AddRecipe: React.FC = () => {
           Cancel
         </button>
       </div>
-
-      {showIngredientModal && (
-        <div className="ingredient-modal">
-          <h3>Add New Ingredient</h3>
-          <label>
-            Name:
-            <input
-              type="text"
-              value={newIngredient.name}
-              onChange={(e) =>
-                handleNewIngredientChange("name", e.target.value)
-              }
-            />
-          </label>
-          <label>
-            Amount:
-            <input
-              type="text"
-              value={newIngredient.amount}
-              onChange={(e) =>
-                handleNewIngredientChange("amount", e.target.value)
-              }
-            />
-          </label>
-          <label>
-            Unit:
-            <select
-              value={newIngredient.unit}
-              onChange={(e) =>
-                handleNewIngredientChange("unit", e.target.value)
-              }
-            >
-              <option value="TL">TL</option>
-              <option value="EL">EL</option>
-              <option value="Pck">Pck</option>
-              <option value="Tasse">Tasse</option>
-              <option value="g">g</option>
-              <option value="Kg">Kg</option>
-              <option value="l">l</option>
-              <option value="Blt">Blt</option>
-              <option value="ml">ml</option>
-              <option value="Prise">Prise</option>
-              <option value="Tropfen">Tropfen</option>
-              <option value=" ">-</option>
-            </select>
-          </label>
-          <button onClick={addNewIngredientToList}>Confirm</button>
-          <button onClick={() => setShowIngredientModal(false)}>Cancel</button>
-        </div>
-      )}
 
       <ToastContainer position="top-right" autoClose={5000} />
     </>
