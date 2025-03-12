@@ -19,11 +19,3 @@
   text-align: center;
   z-index: 1000; /* Additional layer control, though usually not necessary */
 }
-
-.delete-button {
-  background-color: crimson;
-}
-
-.cancel-button {
-  background-color: var(--green2);
-}

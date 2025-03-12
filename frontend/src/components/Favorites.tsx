@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import alienImage from '../../assets/alienNarrow.png';
-import './Favorites.css'
-
+import alienImage from "../../assets/alienNarrow.png";
+import "./Favorites.css";
 
 interface Recipe {
   id: number;
@@ -39,9 +38,15 @@ const Favorites: React.FC = () => {
       <h2>Meine Favoriten</h2>
       <div className="favourites-box">
         {recipes.map((recipe) => {
-          const imageUrl = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage;
+          const imageUrl = recipe.image
+            ? `http://localhost:3000${recipe.image}`
+            : alienImage;
           return (
-            <li key={recipe.id} onClick={() => handleRecipeClick(recipe.id)} className="recipe">
+            <li
+              key={recipe.id}
+              onClick={() => handleRecipeClick(recipe.id)}
+              className="recipe"
+            >
               <h3>{recipe.name}</h3>
               <img
                 src={imageUrl}
@@ -52,7 +57,9 @@ const Favorites: React.FC = () => {
                   objectFit: "cover",
                 }}
               />
-              <p style={{ fontSize: "medium", fontStyle: "italic" }}>Kategorie: {recipe.category}</p>
+              <p style={{ fontSize: "medium", fontStyle: "italic" }}>
+                Kategorie: {recipe.category}
+              </p>
             </li>
           );
         })}

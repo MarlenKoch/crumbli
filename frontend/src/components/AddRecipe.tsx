@@ -21,6 +21,7 @@ const AddRecipe: React.FC = () => {
   const [newIngredient, setNewIngredient] = useState<Ingredient>({
     name: "",
     amount: "",
+    //als Standardwert TL, da es die Standardeingabe beim Hinzufügen einer Zutat ist:
     unit: "TL",
   });
   const [showIngredientModal, setShowIngredientModal] =
@@ -42,13 +43,13 @@ const AddRecipe: React.FC = () => {
 
   const addNewIngredientToList = () => {
     setIngredients([...ingredients, { ...newIngredient }]);
-    setNewIngredient({ name: "", amount: "", unit: "" });
+    setNewIngredient({ name: "", amount: "", unit: "TL" });
     setShowIngredientModal(false);
   };
 
   const handleCheckAndSubmitRecipe = async () => {
     if (!name || !instructions) {
-      return toast.error("Name and instructions are required!");
+      return toast.error("Bitte Name und Anleitung angeben!");
     }
 
     for (let i = 0; i < ingredients.length; i++) {
@@ -62,6 +63,7 @@ const AddRecipe: React.FC = () => {
 
           ingredient.id = response.data.ingredient_id;
         } catch (error) {
+          // wenn die Zutat in der Datenbank noch nicht existiert, kann man sie hinzufügen
           if (
             axios.isAxiosError(error) &&
             (error.response?.status === 404 || error.response?.status === 400)
@@ -78,14 +80,14 @@ const AddRecipe: React.FC = () => {
                 ingredient.id = addResponse.data.ingredient.id;
               } catch (addError) {
                 console.error(addError);
-                return toast.error("Error adding ingredient.");
+                return toast.error("Fehler beim Hinzufügen der Zutat");
               }
             } else {
               return;
             }
           } else {
             console.error(error);
-            return toast.error("Error checking ingredient.");
+            return toast.error("Unerwarteter Fehler :(");
           }
         }
       }
