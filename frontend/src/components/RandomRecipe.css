@@ -10,11 +10,10 @@
   margin: 7px;
   color: var(--green2);
   font-weight: bold;
-  font-size: 24px;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  word-wrap: break-word;
+  /* word-wrap: break-word;
   overflow-wrap: break-word;
-  hyphens: auto;
+  hyphens: auto; */
 }
 
 .polaroid {

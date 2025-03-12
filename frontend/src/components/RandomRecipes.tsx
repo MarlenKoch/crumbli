@@ -67,7 +67,7 @@ const RandomRecipes: React.FC = () => {
         const containerWidth = window.innerWidth;
         const newFontSize = Math.min(
           24,
-          ((containerWidth * 0.265) / textLength) * 2
+          ((containerWidth * 0.24) / textLength) * 2
         );
         element.style.fontSize = newFontSize + "px";
       });
