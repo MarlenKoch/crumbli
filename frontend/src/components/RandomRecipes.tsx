@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./RandomRecipe.css";
-import alienImage from '../../assets/alienNarrow.png';
-
+import alienImage from "../../assets/alienNarrow.png";
 
 interface Recipe {
   id: number;
@@ -16,6 +15,7 @@ interface Recipe {
 
 const RandomRecipes: React.FC = () => {
   const [recipes, setRecipes] = useState<Record<string, Recipe | null>>({});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const categories = ["Kochen", "Backen"];
   const navigate = useNavigate();
 
@@ -76,8 +76,6 @@ const RandomRecipes: React.FC = () => {
     adjustFontSize();
   }, [categories, recipes]);
 
-
-
   return (
     <div>
       <div>
@@ -89,11 +87,14 @@ const RandomRecipes: React.FC = () => {
                 className="polaroid"
               >
                 <img
-                  src={recipes[category]!.image ? `http://localhost:3000${recipes[category]!.image}` : alienImage}
+                  src={
+                    recipes[category]!.image
+                      ? `http://localhost:3000${recipes[category]!.image}`
+                      : alienImage
+                  }
                   alt={recipes[category]!.name}
                   className="img-a"
                 />
-
 
                 <p className="text-a">
                   heute {category}: {recipes[category]!.name}

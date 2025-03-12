@@ -16,12 +16,8 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     <div className="confirmation-overlay">
       <div className="confirmation-dialog">
         <p>{message}</p>
-        <button onClick={onConfirm} className="delete-button">
-          Ja
-        </button>
-        <button onClick={onCancel} className="cancel-button">
-          Nein
-        </button>
+        <button onClick={onConfirm}>Ja</button>
+        <button onClick={onCancel}>Nein</button>
       </div>
     </div>
   );

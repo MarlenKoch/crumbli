@@ -18,7 +18,7 @@
   font-style: italic;
 }
 .delete-button-eimer {
-  background-color: none;
+  background-color: #00000000;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -26,6 +26,10 @@
   align-items: center;
   justify-content: center;
   color: inherit;
+}
+
+.delete-button-eimer:hover {
+  scale: 1.5;
 }
 
 .textarea-field {

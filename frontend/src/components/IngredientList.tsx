@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./IngredientList.css"
+import "./IngredientList.css";
 
 interface Ingredient {
   id: number;
@@ -9,7 +9,6 @@ interface Ingredient {
 
 const IngredientList: React.FC = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,18 +18,12 @@ const IngredientList: React.FC = () => {
       )
       .then((response) => {
         setIngredients(response.data.ingredients);
-        setLoading(false);
       })
       .catch((err) => {
         console.error("Error fetching ingredients: ", err);
         setError("Failed to load ingredients. Please try again later.");
-        setLoading(false);
       });
   }, []);
-
-  if (loading) {
-    return <div>Loading ingredients...</div>;
-  }
 
   if (error) {
     return <div>{error}</div>;

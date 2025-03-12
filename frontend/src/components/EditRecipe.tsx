@@ -3,7 +3,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import './EditRecipe.css'
+import "./EditRecipe.css";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 interface Ingredient {
   id: number;
@@ -40,8 +41,11 @@ const EditRecipe: React.FC = () => {
   const [newIngredient, setNewIngredient] = useState({
     name: "",
     amount: "",
+    //als Standardwert TL, da es die Standardeingabe beim Hinzufügen einer Zutat ist:
     unit: "TL",
   });
+
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const characterLimit = 77;
 
@@ -56,7 +60,7 @@ const EditRecipe: React.FC = () => {
       })
       .catch((err) => {
         console.error(err);
-        toast.error("Error loading recipe details.");
+        toast.error("Fehler beim Laden der Rezeptdetails");
       });
   }, [id]);
 
@@ -73,11 +77,11 @@ const EditRecipe: React.FC = () => {
               (ing) => ing.id !== ingredientId
             ),
           });
-          toast.success("Ingredient deleted successfully.");
+          toast.success("Zutat erfolgreich entfernt");
         })
         .catch((err) => {
           console.error(err);
-          toast.error("Error deleting ingredient.");
+          toast.error("Fehler beim Entfernen der Zutat");
         });
     }
   };
@@ -111,10 +115,10 @@ const EditRecipe: React.FC = () => {
 
       setEditingIngredient(null);
       setIsEditingIngredient(false);
-      toast.success("Ingredient updated successfully.");
+      toast.success("Zutat erfolgreich aktualisiert");
     } catch (error) {
       console.error("Error updating ingredient: ", error);
-      toast.error("Error updating ingredient.");
+      toast.error("Fehler beim Aktualisieren der Zutat");
     }
   };
 
@@ -137,35 +141,35 @@ const EditRecipe: React.FC = () => {
     } catch (err) {
       if (axios.isAxiosError(err)) {
         if (err.response && err.response.status === 404) {
-          if (
-            window.confirm(`${newIngredient.name} does not exist. Create it?`)
-          ) {
-            try {
-              const createResponse = await axios.post(
-                "http://localhost:3000/api/ingredients",
-                {
-                  name: newIngredient.name,
-                }
-              );
-
-              const newIngredientId = createResponse.data.ingredient.id;
-              await addIngredientToRecipe(newIngredientId);
-            } catch (creationError) {
-              console.error("Error creating ingredient: ", creationError);
-              toast.error(
-                "An error occurred while creating the new ingredient."
-              );
-            }
-          }
+          // wenn die Zutat in der Datenbank noch nicht existiert, kann man sie hinzufügen
+          setDialogOpen(true);
         } else {
           console.error("API error: ", err.response ?? err.message);
           toast.error(`API error: ${err.response?.data?.error || err.message}`);
         }
       } else {
         console.error("Unexpected error: ", err);
-        toast.error("Unexpected error occurred while adding the ingredient.");
+        toast.error("Unerwarteter Fehler beim hinzufügen der Zutat");
       }
     }
+  };
+
+  const addIngredientOnConfirm = async () => {
+    try {
+      const createResponse = await axios.post(
+        "http://localhost:3000/api/ingredients",
+        {
+          name: newIngredient.name,
+        }
+      );
+
+      const newIngredientId = createResponse.data.ingredient.id;
+      await addIngredientToRecipe(newIngredientId);
+    } catch (creationError) {
+      console.error("Error creating ingredient: ", creationError);
+      toast.error("Fehler beim Erstellen der neuen Zutat");
+    }
+    setDialogOpen(false);
   };
 
   const addIngredientToRecipe = async (ingredientId: number) => {
@@ -195,7 +199,7 @@ const EditRecipe: React.FC = () => {
       resetIngredientModal();
     } catch (error) {
       console.error("Error adding ingredient to recipe: ", error);
-      toast.error("Error adding ingredient to recipe.");
+      toast.error("Fehler beim Hinzufügen der Zutat.");
     }
   };
 
@@ -209,13 +213,14 @@ const EditRecipe: React.FC = () => {
 
       await axios.put(`http://localhost:3000/api/recipes/${id}/details`, {
         name: recipe.name,
+        //setzt es auf das neue Bild, falls ein neues Bild ausgewählt wurde, sonst wird das alte Bild genommen:
         image: imageFile ? `${recipe.image}` : recipe.image,
         instructions: recipe.instructions,
         favorite: recipe.favorite,
         category: recipe.category,
       });
 
-      toast.success("Recipe details updated successfully.");
+      toast.success("Rezeptdetails erfolgreich aktualisiert");
       setIsEditing({
         name: false,
         image: false,
@@ -225,7 +230,7 @@ const EditRecipe: React.FC = () => {
       });
     } catch (err) {
       console.error(err);
-      toast.error("Error updating recipe details.");
+      toast.error("Fehler beim Aktualiesieren der Rezeptdetails");
     }
   };
 
@@ -250,7 +255,7 @@ const EditRecipe: React.FC = () => {
       );
     } catch (error) {
       console.error("Error uploading image:", error);
-      toast.error("Error uploading new image.");
+      toast.error("Fehler beim Hochladen des Bildes");
     }
   };
 
@@ -281,10 +286,11 @@ const EditRecipe: React.FC = () => {
   const resetIngredientModal = () => {
     setNewIngredient({ name: "", amount: "", unit: "" });
     setIsAddingIngredient(false);
+    setDialogOpen(false);
   };
 
   if (!recipe) {
-    return <div>Loading...</div>;
+    return <div>Es lädt ja schon, nicht so ungeduldig...</div>;
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -320,11 +326,14 @@ const EditRecipe: React.FC = () => {
           {isEditing.image ? (
             <div>
               <input type="file" accept="image/*" onChange={handleFileChange} />
-              <button onClick={() => {
-                setImageFile(null);
-                toggleEdit("image");
-              }
-              }>Abbrechen</button>
+              <button
+                onClick={() => {
+                  setImageFile(null);
+                  toggleEdit("image");
+                }}
+              >
+                Abbrechen
+              </button>
             </div>
           ) : (
             <img
@@ -342,7 +351,7 @@ const EditRecipe: React.FC = () => {
         </label>
       </div>
 
-      <div >
+      <div>
         <label className="flex-label">
           Anleitung:
           {isEditing.instructions ? (
@@ -360,7 +369,7 @@ const EditRecipe: React.FC = () => {
         </label>
       </div>
 
-      <div >
+      <div>
         <label className="flex-label">
           Kategorie:
           {isEditing.category ? (
@@ -398,7 +407,9 @@ const EditRecipe: React.FC = () => {
         </label>
       </div>
 
-      <button className="edit-recipe-buttons" onClick={handleDetailSubmit}>Änderungen anwenden</button>
+      <button className="edit-recipe-buttons" onClick={handleDetailSubmit}>
+        Änderungen anwenden
+      </button>
 
       <div>
         <h3>Zutaten: </h3>
@@ -410,7 +421,7 @@ const EditRecipe: React.FC = () => {
               className="ingredient-item"
             >
               {isEditingIngredient &&
-                editingIngredient?.id === ingredient.id ? (
+              editingIngredient?.id === ingredient.id ? (
                 <div>
                   <input
                     type="text"
@@ -443,24 +454,32 @@ const EditRecipe: React.FC = () => {
                     <option value="Prise">Prise</option>
                     <option value="Tropfen">Tropfen</option>
                     <option value=" ">-</option>
-
                   </select>
-                  <button className="edit-recipe-buttons" onClick={handleIngredientUpdate}>Update</button>
-
+                  <button
+                    className="edit-recipe-buttons"
+                    onClick={handleIngredientUpdate}
+                  >
+                    Update
+                  </button>
                 </div>
               ) : (
-
                 <span>
                   {ingredient.amount} {ingredient.unit} {ingredient.name}
                 </span>
               )}
-              <button className="delete-button-eimer" onClick={() => handleIngredientDelete(ingredient.id)}>
+              <button
+                className="delete-button-eimer"
+                onClick={() => handleIngredientDelete(ingredient.id)}
+              >
                 <img src="../../assets/deleteIcon.png" width={50}></img>
               </button>
             </li>
           ))}
         </ul>
-        <button className="edit-recipe-buttons" onClick={() => setIsAddingIngredient(true)}>
+        <button
+          className="edit-recipe-buttons"
+          onClick={() => setIsAddingIngredient(true)}
+        >
           Zutat hinzufügen
         </button>
       </div>
@@ -507,9 +526,24 @@ const EditRecipe: React.FC = () => {
             <option value="Tropfen">Tropfen</option>
             <option value=" ">-</option>
           </select>
-          <button className="edit-recipe-buttons" onClick={handleAddIngredient}>Hinzufügen</button>
-          <button className="edit-recipe-buttons" onClick={resetIngredientModal}>Abbrechen</button>
+          <button className="edit-recipe-buttons" onClick={handleAddIngredient}>
+            Hinzufügen
+          </button>
+
+          <button
+            className="edit-recipe-buttons"
+            onClick={resetIngredientModal}
+          >
+            Abbrechen
+          </button>
         </div>
+      )}
+      {isDialogOpen && (
+        <ConfirmationDialog
+          message="Diese Zutat existiert noch nicht. Möchtest du sie hinzufügen?"
+          onConfirm={addIngredientOnConfirm}
+          onCancel={resetIngredientModal}
+        />
       )}
       <button onClick={handleBackToRecipe}>Zurück zum Rezept</button>
     </div>
