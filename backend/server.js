@@ -518,6 +518,23 @@ app.get("/api/ingredients", (req, res) => {
   );
 });
 
+// Löschen einer Zutat durch ID
+app.delete("/api/ingredients/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.run("DELETE FROM ingredients WHERE id = ?", [id], function (err) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+      return;
+    }
+    if (this.changes > 0) {
+      res.status(200).send({ message: "Zutat erfolgreich gelöscht" });
+    } else {
+      res.status(404).send({ error: "Zutat nicht gefunden" });
+    }
+  });
+});
+
 // Helper function to run db command with a promise
 function runAsync(query, params = []) {
   return new Promise((resolve, reject) => {
