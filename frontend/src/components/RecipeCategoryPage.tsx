@@ -14,7 +14,7 @@ const RecipeCategoryPage: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [categories] = useState<string[]>([
     "Kochen",
-    "Backen", // Add more categories as needed
+    "Backen",
   ]);
   const [selectedCategory, setSelectedCategory] = useState<string>("Kochen");
   const [reloadTrigger, setReloadTrigger] = useState(0);

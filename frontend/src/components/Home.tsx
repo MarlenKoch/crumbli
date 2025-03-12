@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-//import RecipeCategoryPage from "./RecipeCategoryPage";
 import RecipeSearchBar from "./RecipeSearchBar";
 import RandomRecipes from "./RandomRecipes";
 import "../App.css";
@@ -34,8 +33,6 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* <RecipeCategoryPage /> */}
     </div>
   );
 };

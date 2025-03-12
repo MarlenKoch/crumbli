@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./FooterBar.css";
 
 const FooterBar: React.FC = () => {
   return (

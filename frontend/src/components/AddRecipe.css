@@ -1,7 +1,7 @@
 .add-recipe-container {
   width: 100%;
-  max-height: 80vh; /* Maximum height to enable scrolling */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 80vh;
+  overflow-y: auto;
   margin: 0 auto;
   padding: 20px;
   background-color: var(--brown1);
@@ -71,17 +71,13 @@
 
 .textarea-field {
   width: 90%;
-  height: 150px; /* Fixed height */
+  height: 150px;
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
-  resize: none; /* Disable resizing */
-}
-
-ul {
-  list-style-type: none;
+  resize: none;
 }
 
 .custom-file-upload {

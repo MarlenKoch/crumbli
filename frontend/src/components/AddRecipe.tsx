@@ -122,7 +122,6 @@ const AddRecipe: React.FC = () => {
     if (e.target.files) {
       const selectedFile = e.target.files[0];
 
-      // Automatically upload the file upon selection
       const formData = new FormData();
       formData.append("image", selectedFile);
 

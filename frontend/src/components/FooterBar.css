@@ -1,0 +1,33 @@
+.footer-bar {
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: var(--brown3);
+  box-shadow: 0 2px 15px -2px var(--brown2);
+}
+
+.footer-links {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.footer-links li {
+  display: inline;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.footer-links a:hover {
+  color: var(--green2);
+}

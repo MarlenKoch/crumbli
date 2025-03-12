@@ -22,7 +22,7 @@ interface Recipe {
 
 const Favorites: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const navigate = useNavigate(); // Use navigate instead of history
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get("http://localhost:3000/api/recipes/favorites").then((res) => {

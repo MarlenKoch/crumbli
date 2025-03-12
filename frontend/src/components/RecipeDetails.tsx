@@ -84,10 +84,11 @@ const RecipeDetails: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+
   const imageSrc = recipe.image
     ? `http://localhost:3000${recipe.image}`
     : alienImage;
-
+  
   return (
     <div className="recipe-detail-box">
       <div className="star-icon">

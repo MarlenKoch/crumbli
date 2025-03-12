@@ -35,14 +35,14 @@ const Recipes: React.FC = () => {
       <h2>Recipes</h2>
       <div className="container-for-recipes">
         {recipes.map((recipe) => {
-          const imageUrl = `http://localhost:3000${recipe.image}`; // Construct full image URL
+          const imageUrl = `http://localhost:3000${recipe.image}`;
           return (
             <div
               key={recipe.id}
               onClick={() => handleRecipeClick(recipe.id)}
               style={{
                 backgroundImage: `url(${imageUrl}), url(../../assets/alien.jpg)`,
-                backgroundSize: "cover", // Optional: Add to make the image cover the div
+                backgroundSize: "cover",
                 backgroundPosition: "center",
                 height: 270,
                 width: 270,
