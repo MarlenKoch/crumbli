@@ -47,8 +47,8 @@ const RecipeSearchBar: React.FC = () => {
 
   const handleResultClick = (id: number) => {
     navigate(`/recipe-details/${id}`);
-    setSearchQuery(""); // Reset search bar
-    setSearchResults([]); // Clear results
+    setSearchQuery("");
+    setSearchResults([]);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -56,8 +56,8 @@ const RecipeSearchBar: React.FC = () => {
       searchContainerRef.current &&
       !searchContainerRef.current.contains(event.target as Node)
     ) {
-      setSearchQuery(""); // Reset search bar
-      setSearchResults([]); // Clear results
+      setSearchQuery("");
+      setSearchResults([]);
     }
   };
 

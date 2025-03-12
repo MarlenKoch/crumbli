@@ -57,7 +57,6 @@
 .link-button-3,
 .link-button-4 {
   background-color: #5d7951;
-  /* height: 580px; */
   height: calc(100vh - 278px);
   width: calc(73.5vw / 4 - 52px);
   background-size: calc(73.5vw / 4 - 52px + 200px) calc(100vh - 278px + 100px),

@@ -130,7 +130,7 @@ const EditRecipe: React.FC = () => {
       const ingredientId = response.data.ingredient_id;
 
       if (ingredientId) {
-        await addIngredientToRecipe(ingredientId);  //Fehler
+        await addIngredientToRecipe(ingredientId);
       } else {
         throw new Error("Ingredient ID not found");
       }
@@ -168,7 +168,7 @@ const EditRecipe: React.FC = () => {
     }
   };
 
-  const addIngredientToRecipe = async (ingredientId: number) => { //gibt beim bearbeiten einen Fehler
+  const addIngredientToRecipe = async (ingredientId: number) => {
     try {
       await axios.post(`http://localhost:3000/api/recipes/${id}/ingredient`, {
         ingredient_id: ingredientId,
@@ -209,7 +209,7 @@ const EditRecipe: React.FC = () => {
 
       await axios.put(`http://localhost:3000/api/recipes/${id}/details`, {
         name: recipe.name,
-        image: imageFile ? `${recipe.image}` : recipe.image, // Use new image if uploaded
+        image: imageFile ? `${recipe.image}` : recipe.image,
         instructions: recipe.instructions,
         favorite: recipe.favorite,
         category: recipe.category,
@@ -247,7 +247,7 @@ const EditRecipe: React.FC = () => {
       setImageFile(null);
       setRecipe((prev) =>
         prev ? { ...prev, image: response.data.filePath } : prev
-      ); // Set new image path
+      );
     } catch (error) {
       console.error("Error uploading image:", error);
       toast.error("Error uploading new image.");
@@ -274,7 +274,7 @@ const EditRecipe: React.FC = () => {
   };
 
   const handleBackToRecipe = async () => {
-    await handleDetailSubmit(); // Ensure details are submitted before navigating
+    await handleDetailSubmit();
     navigate(`/recipe-details/${id}`);
   };
 

@@ -64,11 +64,11 @@ const RecipeDetails: React.FC = () => {
     const queryParams = new URLSearchParams(location.search);
     const from = queryParams.get("from");
     if (from == "recipes") {
-      navigate("/recipes"); // Go back to the previous page if 'from' parameter is present
+      navigate("/recipes");
     } else if (from) {
       navigate(-1);
     } else {
-      navigate("/"); // Default action to navigate to the home page
+      navigate("/");
     }
   };
 
@@ -76,7 +76,6 @@ const RecipeDetails: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  // Ensure that the image path is prefixed with the correct base URL
   const imageSrc = recipe.image ? `http://localhost:3000${recipe.image}` : alienImage;
 
   return (
