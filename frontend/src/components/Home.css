@@ -2,7 +2,6 @@
   width: 100%;
   height: 100%;
   margin: 0;
-  /* padding: 2rem; */
   text-align: center;
   --brown1: #e4cdaf;
   --brown2: #5b3a29;
@@ -12,7 +11,15 @@
   --white: #ffffff;
   color: var(--white);
   background-color: var(--brown1);
-  overflow: hidden; /* Prevent scrolling */
+  overflow: hidden;
+}
+
+.big-header {
+  font-size: 2cm;
+  font-weight: bold;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  color: var(--brown2);
 }
 
 .container-home {
