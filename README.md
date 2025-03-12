@@ -19,7 +19,7 @@ Das Projekt ist in zwei Hauptordner unterteilt:
 
 ## Installation
 
-Um Crübli auf Ihrem lokalen System zum Laufen zu bringen, folgen Sie bitte diesen Schritten:
+Um Crümbli auf Ihrem lokalen System zum Laufen zu bringen, folgen Sie bitte diesen Schritten:
 
 1. **Repository klonen und Abhängigkeiten installieren**
 
