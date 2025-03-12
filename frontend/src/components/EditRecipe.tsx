@@ -455,7 +455,7 @@ const EditRecipe: React.FC = () => {
                 </span>
               )}
               <button className="delete-button-eimer" onClick={() => handleIngredientDelete(ingredient.id)}>
-                <img src="/deleteIcon.png" width={50}></img>
+                <img src="../../assets/deleteIcon.png" width={50}></img>
               </button>
             </li>
           ))}
