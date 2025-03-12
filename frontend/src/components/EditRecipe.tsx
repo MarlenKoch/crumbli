@@ -421,7 +421,7 @@ const EditRecipe: React.FC = () => {
               className="ingredient-item"
             >
               {isEditingIngredient &&
-              editingIngredient?.id === ingredient.id ? (
+                editingIngredient?.id === ingredient.id ? (
                 <div>
                   <input
                     type="text"
@@ -445,7 +445,7 @@ const EditRecipe: React.FC = () => {
                     <option value="TL">TL</option>
                     <option value="EL">EL</option>
                     <option value="Pck">Pck</option>
-                    <option value="Tasse">Tasse</option>
+                    <option value="Tasse">Tasse/n</option>
                     <option value="g">g</option>
                     <option value="Kg">Kg</option>
                     <option value="l">l</option>
@@ -516,7 +516,7 @@ const EditRecipe: React.FC = () => {
             <option value="TL">TL</option>
             <option value="EL">EL</option>
             <option value="Pck">Pck</option>
-            <option value="Tasse">Tasse</option>
+            <option value="Tasse">Tasse/n</option>
             <option value="g">g</option>
             <option value="Kg">Kg</option>
             <option value="l">l</option>

@@ -251,7 +251,7 @@ const AddRecipe: React.FC = () => {
                 <option value="TL">TL</option>
                 <option value="EL">EL</option>
                 <option value="Pck">Pck</option>
-                <option value="Tasse">Tasse</option>
+                <option value="Tasse">Tasse/n</option>
                 <option value="g">g</option>
                 <option value="Kg">Kg</option>
                 <option value="l">l</option>
