@@ -1,0 +1,29 @@
+.confirmation-overlay {
+  position: fixed; /* Use fixed so it stays in place when scrolling */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 999; /* Ensure it appears above other content */
+}
+
+.confirmation-dialog {
+  background-color: var(--brown3);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 1000; /* Additional layer control, though usually not necessary */
+}
+
+.delete-button {
+  background-color: crimson;
+}
+
+.cancel-button {
+  background-color: var(--green2);
+}
