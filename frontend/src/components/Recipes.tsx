@@ -32,7 +32,7 @@ const Recipes: React.FC = () => {
 
   return (
     <div>
-      <h2>Recipes</h2>
+      <h2>Rezepte</h2>
       <div className="container-for-recipes">
         {recipes.map((recipe) => {
           const imageUrl = `http://localhost:3000${recipe.image}`;
