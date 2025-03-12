@@ -111,12 +111,12 @@ const AddRecipe: React.FC = () => {
         })),
       })
       .then(() => {
-        toast.success("Recipe added successfully!");
+        toast.success("Rezept erfolgreich hinzugefügt");
         navigate(`/`);
       })
       .catch((err) => {
         console.error(err);
-        toast.error("Error adding recipe.");
+        toast.error("Fehler beim Hinzufügen des Rezeptes");
       });
   };
 
@@ -136,10 +136,10 @@ const AddRecipe: React.FC = () => {
           }
         );
         setImagePath(response.data.filePath);
-        toast.success("Image uploaded successfully!");
+        toast.success("Bild erfolgreich hochgeladen");
       } catch (error) {
         console.error("Error uploading image:", error);
-        toast.error("Error uploading image.");
+        toast.error("Fehler beim Hochladen des Bildes");
       }
     }
   };
