@@ -157,7 +157,7 @@ const AddRecipe: React.FC = () => {
   return (
     <>
       <div className="add-recipe-container">
-        <h2>Add Recipe</h2>
+        <h2>Rezept hinzufügen</h2>
         <div className="form-group">
           <input
             type="text"
@@ -180,7 +180,7 @@ const AddRecipe: React.FC = () => {
         </div>
         <div className="form-group">
           <textarea
-            placeholder="Instructions"
+            placeholder="Anleitung"
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
             className="textarea-field"
@@ -188,7 +188,7 @@ const AddRecipe: React.FC = () => {
         </div>
         <div className="form-group-inline">
           <label>
-            Favorite:
+            Favorit:
             <input
               type="checkbox"
               checked={favorite}
@@ -196,7 +196,7 @@ const AddRecipe: React.FC = () => {
             />
           </label>
           <label>
-            Category:
+            Kategorie:
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
@@ -207,7 +207,7 @@ const AddRecipe: React.FC = () => {
             </select>
           </label>
         </div>
-        <h3>Ingredients</h3>
+        <h3>Zutaten</h3>
         <div>
           {ingredients.map((ingredient, index) => (
             <div className="ingredient-group" key={index}>
@@ -218,7 +218,7 @@ const AddRecipe: React.FC = () => {
 
         {showIngredientModal && (
           <div className="ingredient-modal">
-            <h4>Add New Ingredient</h4>
+            <h4>Zutat hinzufügen</h4>
             <label>
               Name:
               <input
@@ -230,7 +230,7 @@ const AddRecipe: React.FC = () => {
               />
             </label>
             <label>
-              Amount:
+              Menge:
               <input
                 type="text"
                 value={newIngredient.amount}
@@ -240,7 +240,7 @@ const AddRecipe: React.FC = () => {
               />
             </label>
             <label>
-              Unit:
+              Einheit:
               <select
                 value={newIngredient.unit}
                 onChange={(e) =>
@@ -261,20 +261,20 @@ const AddRecipe: React.FC = () => {
                 <option value=" ">-</option>
               </select>
             </label>
-            <button onClick={addNewIngredientToList}>Confirm</button>
+            <button onClick={addNewIngredientToList}>Bestätigen</button>
             <button onClick={() => setShowIngredientModal(false)}>
-              Cancel
+              Abbrechen
             </button>
           </div>
         )}
         <button onClick={handleAddIngredient} className="action-button">
-          Add Ingredient
+          Zutat hinzufügen
         </button>
         <button onClick={handleCheckAndSubmitRecipe} className="action-button">
-          Add Recipe
+          Rezept hinzufügen
         </button>
         <button onClick={handleCancel} className="action-button">
-          Cancel
+          Abbrechen
         </button>
       </div>
 
