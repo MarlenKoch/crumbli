@@ -43,8 +43,12 @@ Damit wird der Server gestartet, der mit Express.js aufgebaut ist.
 
 Navigieren Sie in den `frontend` Ordner und führen Sie die folgenden Befehle aus:
 
+Für einen Build-Server:
 ```
 npm run build
+```
+Für einen Developement-Server:
+```
 npm run dev
 ```
 
